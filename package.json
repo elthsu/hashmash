@@ -4,7 +4,8 @@
   "description": "A Project Manager for Aspiring Coders",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
+    "concurrently": "^3.5.0",
     "webpack": "^1.13.1"
   }
 }
