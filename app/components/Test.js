@@ -24,6 +24,7 @@ class Test extends React.Component {
 		});
 
 		// receive initial project list and task properties
+		// will use this data to make drop-downs
 		socket.once("init", (data) => {
 			console.log(data);
 
@@ -33,11 +34,13 @@ class Test extends React.Component {
 		});
 
 		// client receives whole project object
+		// triggered when user "joins" a project or a brand new task was created
 		socket.on("project", (data) => {
 			console.log("project", data);
 		});
 
 		// client receives update related to a single task
+		// triggered when individual task properties were updated
 		socket.on("task", (data) => {
 			console.log("task", data);
 		});
@@ -49,7 +52,7 @@ class Test extends React.Component {
 	}
 
 	_newTask() {
-		// won't work until user has entered a "room" (i.e. selected a project)
+		// won't work until user has joined a "room" (i.e. selected a project)
 		// if you don't send an id, this becomes a new task
 		socket.emit("update", {
 			title: "New Task",
@@ -74,9 +77,9 @@ class Test extends React.Component {
 
 				<p>Test buttons</p>
 
-				<button onClick={this._getInfo}>get "test1" info</button>
+				<button onClick={this._getInfo}>join "test1" project channel</button>
 
-				<button onClick={this._newTask}>make new test for "test1"</button>
+				<button onClick={this._newTask}>make new task for "test1"</button>
 
 				<button onClick={this._updateTask}>update task in "tes1"</button>
 			</div>
