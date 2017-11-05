@@ -12,6 +12,7 @@ db.types.find({}, function(err, docs) {
 	if (docs.length === 0) {
 		db.types.insert([
 			{name:"feature"}, 
+			{name:"bug"}, 
 			{name:"research"}
 		]);
 
@@ -33,28 +34,35 @@ db.types.find({}, function(err, docs) {
 
 // dummy data for testing
 if (true) {
-	db.projects.find({name:"test"}, function(err, docs) {
+	db.projects.find({name:"test1"}, function(err, docs) {
 		if (docs.length === 0) {
-			db.projects.insert({
-				name: "test",
-				lastTaskId: 1,
-				tasks: [
-					{
-						id: 1,
-						title: "Pretend to do something",
-						owner: null,
-						description: "Try to look busy, okay?",
-						priority: "normal",
-						status: "open",
-						type: "research",
-						dateCreated: "2017-10-01",
-						dateModified: "2017-11-01",
-						timeEstimate: "120",
-						timeSpent: "60",
-						comments: []
-					}
-				]
-			});
+			db.projects.insert([
+				{
+					name: "test1",
+					lastTaskId: 1,
+					tasks: [
+						{
+							id: 1,
+							title: "Pretend to do something",
+							owner: null,
+							description: "Try to look busy, okay?",
+							priority: "normal",
+							status: "open",
+							type: "research",
+							dateCreated: new Date(),
+							dateModified: new Date(),
+							timeEstimate: "120",
+							timeSpent: "60",
+							comments: []
+						}
+					]
+				},
+				{
+					name: "test2",
+					lastTaskId: 0,
+					tasks: []
+				}
+			]);
 		}
 	});
 }

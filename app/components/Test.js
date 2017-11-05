@@ -9,36 +9,76 @@ class Test extends React.Component {
 		super();
 
 		this.state = {
-			project: {}
+			initialData: {}
 		};
+
+		this._getInfo = this._getInfo.bind(this);
+		this._newTask = this._newTask.bind(this);
+		this._updateTask = this._updateTask.bind(this);
 	}
 
 	componentDidMount() {
-		// when user connects to server, try to join room based on project name
+		// when user connects to server, request initial data
 		socket.on("connect", function(data) {
-			socket.emit("join", "test");
+			socket.emit("login", "...");
 		});
 
-		// client receives an update from server
-		socket.on("update", (data) => {
-			// check type. update could be whole project or task level
-			switch(data.type) {
-				case "project":
-					this.setState({
-						project: data.data
-					});
+		// receive initial project list and task properties
+		socket.once("init", (data) => {
+			console.log(data);
 
-					break;
-			}
+			this.setState({
+				initialData: data
+			});
+		});
+
+		// client receives whole project object
+		socket.on("project", (data) => {
+			console.log("project", data);
+		});
+
+		// client receives update related to a single task
+		socket.on("task", (data) => {
+			console.log("task", data);
+		});
+	}
+
+	_getInfo() {
+		// sets user up to start getting updates on this project
+		socket.emit("join", "test1");
+	}
+
+	_newTask() {
+		// won't work until user has entered a "room" (i.e. selected a project)
+		// if you don't send an id, this becomes a new task
+		socket.emit("update", {
+			title: "New Task",
+			priority: "critical",
+
+		});
+	}
+
+	_updateTask() {
+		// won't work until user has entered a "room" (i.e. selected a project)
+		socket.emit("update", {
+			id: 1,
+			title: "New Name",
+			description: "New description"
 		});
 	}
 
 	render() {
 		return (
-			<div>
-				you are in project: {this.state.project.name}
-				
-				<p>{JSON.stringify(this.state.project)}</p>
+			<div>				
+				<p>Initial data: {JSON.stringify(this.state.initialData)}</p>
+
+				<p>Test buttons</p>
+
+				<button onClick={this._getInfo}>get "test1" info</button>
+
+				<button onClick={this._newTask}>make new test for "test1"</button>
+
+				<button onClick={this._updateTask}>update task in "tes1"</button>
 			</div>
 		);
 	}
