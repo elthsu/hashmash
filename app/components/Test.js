@@ -15,6 +15,7 @@ class Test extends React.Component {
 		this._getInfo = this._getInfo.bind(this);
 		this._newTask = this._newTask.bind(this);
 		this._updateTask = this._updateTask.bind(this);
+		this._deleteTask = this._deleteTask.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,16 +34,17 @@ class Test extends React.Component {
 			});
 		});
 
-		// client receives whole project object
-		// triggered when user "joins" a project or a brand new task was created
-		socket.on("project", (data) => {
-			console.log("project", data);
+		// client receives whole tasks array
+		// triggered when user "joins" a project or tasks have been updated
+		socket.on("tasks", (data) => {
+			console.log("all tasks", data);
 		});
 
 		// client receives update related to a single task
 		// triggered when individual task properties were updated
-		socket.on("task", (data) => {
-			console.log("task", data);
+		socket.on("task #1", (data) => {
+			// if data is null, we know it was deleted
+			console.log("task #1", data);
 		});
 	}
 
@@ -53,8 +55,7 @@ class Test extends React.Component {
 
 	_newTask() {
 		// won't work until user has joined a "room" (i.e. selected a project)
-		// if you don't send an id, this becomes a new task
-		socket.emit("update", {
+		socket.emit("new", {
 			title: "New Task",
 			priority: "critical",
 
@@ -63,11 +64,18 @@ class Test extends React.Component {
 
 	_updateTask() {
 		// won't work until user has entered a "room" (i.e. selected a project)
+		// id of task is required
 		socket.emit("update", {
 			id: 1,
 			title: "New Name",
 			description: "New description"
 		});
+	}
+
+	_deleteTask() {
+		// won't work until user has entered a "room" (i.e. selected a project)
+		// id of task is required
+		socket.emit("delete", {id: 1});
 	}
 
 	render() {
@@ -82,6 +90,8 @@ class Test extends React.Component {
 				<button onClick={this._newTask}>make new task for "test1"</button>
 
 				<button onClick={this._updateTask}>update task in "tes1"</button>
+
+				<button onClick={this._deleteTask}>deletes task in "tes1"</button>
 			</div>
 		);
 	}
