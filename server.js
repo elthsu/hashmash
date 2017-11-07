@@ -121,6 +121,9 @@ io.on("connection", function(socket) {
 			update: {$set: obj},
 			new: true
 		}, function(err, docs) {
+			// if task no longer exists, cancel out
+			if (!docs) return;
+
 			// find the actual task that was updated, 'cause mongo too dumb to do it for me
 			var task = docs.tasks.find((t) => {
 				return t.id === data.id;
