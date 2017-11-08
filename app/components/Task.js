@@ -54,7 +54,7 @@ class Task extends React.Component {
       <div>
         <nav>
           <div className="nav-wrapper pad">
-            <a href="#!" className="brand-logo logo">triloGira</a>
+            <a href="#!" className="brand-logo logo">#mash</a>
             <a href="#" data-activates="mobile-demo" className="button-collapse">
               <i className="material-icons">menu</i>
             </a>
