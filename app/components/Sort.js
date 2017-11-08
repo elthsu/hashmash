@@ -14,6 +14,8 @@ class Sort extends React.Component {
     this.state = {
       project: "project1",
       tasks: [],
+      activeColumn: "",
+      sortDirection: ""
 
     };
 
@@ -27,17 +29,23 @@ class Sort extends React.Component {
     this.setState({tasks: dummyData})
   }
 
+
   alphaSort(e, name) {
     var toggle = e.target.getAttribute("value");
+    var id = e.target.getAttribute("id");
     if (toggle === "a") {
       var unSorted = this.state.tasks;
       var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
       e.target.setAttribute("value", "b");
+      this.setState({activeColumn: id});
+      this.setState({sortDirection: "b"});
       this.setState({tasks: sorted});
     } else {
       var unSorted = this.state.tasks;
       var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
       e.target.setAttribute("value", "a");
+      this.setState({activeColumn: id});
+      this.setState({sortDirection: "a"});
       this.setState({tasks: sorted});
     }
 
@@ -132,13 +140,13 @@ class Sort extends React.Component {
               <table className="highlight">
                 <thead>
                   <tr>
-                      <th value="a" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
-                      <th value="a" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
-                      <th value="a" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
-                      <th value="a" onClick={(e)=>this.timeSort(e, "timeEstimate")}>Time Allotment</th>
-                      <th value="a" onClick={(e)=>this.timeSort(e, "timeSpent")}>Time Spent</th>
-                      <th value="a" onClick={(e)=>this.dateSort(e, "dateCreated")}>Date Created</th>
-                      <th value="a" onClick={(e)=>this.dateSort(e, "dateModified")}>Last Update</th>
+                      <th value="a" id="title" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
+                      <th value="a" id="owner" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
+                      <th value="a" id="status" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
+                      <th value="a" id="timeEstimate" onClick={(e)=>this.timeSort(e, "timeEstimate")}>Time Allotment</th>
+                      <th value="a" id="timeSpent" onClick={(e)=>this.timeSort(e, "timeSpent")}>Time Spent</th>
+                      <th value="a" id="dateCreated" onClick={(e)=>this.dateSort(e, "dateCreated")}>Date Created</th>
+                      <th value="a" id="dateModified" onClick={(e)=>this.dateSort(e, "dateModified")}>Last Update</th>
                   </tr>
                 </thead>
 

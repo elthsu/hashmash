@@ -6,4 +6,4 @@ var Test = require("./components/Test")
 var Sort = require("./components/Sort")
 
 
-ReactDOM.render(<Task />, document.getElementById("app"));
+ReactDOM.render(<Sort />, document.getElementById("app"));
