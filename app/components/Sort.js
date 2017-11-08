@@ -33,12 +33,12 @@ class Sort extends React.Component {
       var unSorted = this.state.tasks;
       var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
       e.target.setAttribute("value", "b");
-      this.setState({tasks: sorted})
+      this.setState({tasks: sorted});
     } else {
       var unSorted = this.state.tasks;
       var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
       e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted})
+      this.setState({tasks: sorted});
     }
 
   }
@@ -50,7 +50,6 @@ class Sort extends React.Component {
       var sorted = unSorted.sort(function(a, b) {
         a = parseInt(a[time]);
         b = parseInt(b[time]);
-        console.log(a, b)
         return a - b;
       });
       e.target.setAttribute("value", "b");
@@ -62,7 +61,7 @@ class Sort extends React.Component {
         return b - a;
       });
       e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted})
+      this.setState({tasks: sorted});
     }
 
   }
@@ -85,7 +84,7 @@ class Sort extends React.Component {
       return a>b ? -1 : a<b ? 1 : 0;
       });
       e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted})
+      this.setState({tasks: sorted});
     }
 
 
