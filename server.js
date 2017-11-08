@@ -36,6 +36,10 @@ io.on("connection", function(socket) {
 	socket.on("join", function(data) {
 		console.log(`client connected to project "${data}"`);
 
+		// leave original room, if in one
+		if (socket.room) 
+			socket.leave(socket.room);
+
 		socket.room = data;
 		socket.join(data);
 

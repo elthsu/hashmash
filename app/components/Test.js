@@ -12,7 +12,7 @@ class Test extends React.Component {
 			initialData: {}
 		};
 
-		this._getInfo = this._getInfo.bind(this);
+		this._selectProject = this._selectProject.bind(this);
 		this._newTask = this._newTask.bind(this);
 		this._updateTask = this._updateTask.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
@@ -48,9 +48,11 @@ class Test extends React.Component {
 		});
 	}
 
-	_getInfo() {
-		// sets user up to start getting updates on this project
-		socket.emit("join", "test1");
+	_selectProject(event) {
+		if (event.target.value) {
+			// sets user up to start getting updates on this project
+			socket.emit("join", event.target.value);
+		}
 	}
 
 	_newTask() {
@@ -83,15 +85,19 @@ class Test extends React.Component {
 			<div>				
 				<p>Initial data: {JSON.stringify(this.state.initialData)}</p>
 
-				<p>Test buttons</p>
+				Select a project:
 
-				<button onClick={this._getInfo}>join "test1" project channel</button>
+				<select style={{display:"block"}} onChange={this._selectProject}>
+					<option></option>
+					<option value="test1">test1</option>
+					<option value="test2">test2</option>
+				</select>
 
-				<button onClick={this._newTask}>make new task for "test1"</button>
+				<button onClick={this._newTask}>make new task for this project</button>
 
-				<button onClick={this._updateTask}>update task in "tes1"</button>
+				<button onClick={this._updateTask}>update task in this project</button>
 
-				<button onClick={this._deleteTask}>deletes task in "tes1"</button>
+				<button onClick={this._deleteTask}>delete task in this project</button>
 			</div>
 		);
 	}
