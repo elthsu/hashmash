@@ -16,6 +16,7 @@ class Test extends React.Component {
 		this._newTask = this._newTask.bind(this);
 		this._updateTask = this._updateTask.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
+		this._sendChat = this._sendChat.bind(this);
 	}
 
 	componentDidMount() {
@@ -80,6 +81,18 @@ class Test extends React.Component {
 		socket.emit("delete", {id: 1});
 	}
 
+	_sendChat() {
+		// normally, this would be tied to state, but since we're testing and all...
+		var txt = document.getElementById("chat").value;
+
+		// chat message should include id of task
+		socket.emit("chat", {
+			id: 1,
+			user: "elton bo belton",
+			message: txt
+		});
+	}
+
 	render() {
 		return (
 			<div>				
@@ -98,6 +111,11 @@ class Test extends React.Component {
 				<button onClick={this._updateTask}>update task in this project</button>
 
 				<button onClick={this._deleteTask}>delete task in this project</button>
+
+				<p>
+					<input type="text" id="chat" /> 
+					<button onClick={this._sendChat}>Send Chat</button>
+				</p>
 			</div>
 		);
 	}
