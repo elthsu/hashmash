@@ -12,9 +12,11 @@ class Test extends React.Component {
 			initialData: {}
 		};
 
-		this._getInfo = this._getInfo.bind(this);
+		this._selectProject = this._selectProject.bind(this);
 		this._newTask = this._newTask.bind(this);
 		this._updateTask = this._updateTask.bind(this);
+		this._deleteTask = this._deleteTask.bind(this);
+		this._sendChat = this._sendChat.bind(this);
 	}
 
 	componentDidMount() {
@@ -33,28 +35,30 @@ class Test extends React.Component {
 			});
 		});
 
-		// client receives whole project object
-		// triggered when user "joins" a project or a brand new task was created
-		socket.on("project", (data) => {
-			console.log("project", data);
+		// client receives whole tasks array
+		// triggered when user "joins" a project or tasks have been updated
+		socket.on("tasks", (data) => {
+			console.log("all tasks", data);
 		});
 
 		// client receives update related to a single task
 		// triggered when individual task properties were updated
-		socket.on("task", (data) => {
-			console.log("task", data);
+		socket.on("task #1", (data) => {
+			// if data is null, we know it was deleted
+			console.log("task #1", data);
 		});
 	}
 
-	_getInfo() {
-		// sets user up to start getting updates on this project
-		socket.emit("join", "test1");
+	_selectProject(event) {
+		if (event.target.value) {
+			// sets user up to start getting updates on this project
+			socket.emit("join", event.target.value);
+		}
 	}
 
 	_newTask() {
 		// won't work until user has joined a "room" (i.e. selected a project)
-		// if you don't send an id, this becomes a new task
-		socket.emit("update", {
+		socket.emit("new", {
 			title: "New Task",
 			priority: "critical",
 
@@ -63,10 +67,29 @@ class Test extends React.Component {
 
 	_updateTask() {
 		// won't work until user has entered a "room" (i.e. selected a project)
+		// id of task is required
 		socket.emit("update", {
 			id: 1,
 			title: "New Name",
 			description: "New description"
+		});
+	}
+
+	_deleteTask() {
+		// won't work until user has entered a "room" (i.e. selected a project)
+		// id of task is required
+		socket.emit("delete", {id: 1});
+	}
+
+	_sendChat() {
+		// normally, this would be tied to state, but since we're testing and all...
+		var txt = document.getElementById("chat").value;
+
+		// chat message should include id of task
+		socket.emit("chat", {
+			id: 1,
+			user: "elton bo belton",
+			message: txt
 		});
 	}
 
@@ -75,13 +98,24 @@ class Test extends React.Component {
 			<div>				
 				<p>Initial data: {JSON.stringify(this.state.initialData)}</p>
 
-				<p>Test buttons</p>
+				Select a project:
 
-				<button onClick={this._getInfo}>join "test1" project channel</button>
+				<select style={{display:"block"}} onChange={this._selectProject}>
+					<option></option>
+					<option value="test1">test1</option>
+					<option value="test2">test2</option>
+				</select>
 
-				<button onClick={this._newTask}>make new task for "test1"</button>
+				<button onClick={this._newTask}>make new task for this project</button>
 
-				<button onClick={this._updateTask}>update task in "tes1"</button>
+				<button onClick={this._updateTask}>update task in this project</button>
+
+				<button onClick={this._deleteTask}>delete task in this project</button>
+
+				<p>
+					<input type="text" id="chat" /> 
+					<button onClick={this._sendChat}>Send Chat</button>
+				</p>
 			</div>
 		);
 	}
