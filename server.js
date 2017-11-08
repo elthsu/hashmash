@@ -159,6 +159,38 @@ io.on("connection", function(socket) {
 			io.to(socket.room).emit("task #" + data.id, null);
 		});
 	});
+
+	socket.on("chat", function(data) {
+		// required
+		if (!socket.room || !data.id) return;
+
+		// add comment to nested task object
+		db.projects.findAndModify({
+			query: {
+				name: socket.room, 
+				"tasks.id": data.id
+			},
+			update: {
+				$push: {
+					"tasks.$.comments": {
+						user: data.user,
+						message: data.message,
+						dateCreated: new Date()
+					}
+				}
+			},
+			new: true
+		}, function(err, docs) {
+			console.log(docs);
+			// find the actual task that was updated, 'cause mongo too dumb to do it for me
+			var task = docs.tasks.find((t) => {
+				return t.id === data.id;
+			});
+
+			// send new task to every other client in same room
+			io.to(socket.room).emit("task #" + data.id, task);
+		});
+	});
 });
 
 // public files and routes
