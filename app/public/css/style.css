@@ -7,6 +7,16 @@
     background: Peru;
   }
 
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
   #announcement {
     color: black;
   }
@@ -258,4 +268,5 @@
 
   .gitAvatarImg {
     width: 20px;
+    border-radius: 4px;
   }
