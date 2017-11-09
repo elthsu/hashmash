@@ -18,7 +18,8 @@
     color: saddlebrown
   }
 
-  .logo {
+  .logo,
+  .header {
     font-family: 'Lobster', cursive;
   }
 
@@ -196,4 +197,29 @@
     margin: 0;
     padding: 0;
 
+  }
+
+  .gitAuth {
+    position: relative;
+    background-color: black;
+    color: white;
+    margin: auto;
+    padding-top: 10px;
+    width: 380px;
+    text-align: center;
+    padding-bottom: 10px;
+    border-radius: 30px;
+    padding-left: 40px;
+  }
+
+  #gitLogo {
+    position: absolute;
+    width: 35px;
+    left: 65px;
+    top: 3px;
+  }
+
+  .gitAuth:hover {
+    cursor: pointer;
+    background-color: black;
   }
