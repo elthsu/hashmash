@@ -1,5 +1,8 @@
 var express = require("express");
+var cookieParser = require('cookie-parser');
 var mongojs = require("mongojs");
+var path = require("path");
+var axios = require("axios");
 var q = require("q");
 
 // mongo db
@@ -193,16 +196,51 @@ io.on("connection", function(socket) {
 	});
 });
 
-// public files and routes
-app.use(express.static("app/public"));
+app.use(cookieParser());
 
 app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "./app/public/index.html"));
+	// redirected from github
+	if (req.query && req.query.code) {
+		axios.post("https://github.com/login/oauth/access_token", {
+			code: req.query.code,
+			client_id: "5e9ec4eec65e92a74459",
+			client_secret: "fb7522788ea96b738012350f52c8d7259dead5ef"
+		}).then(function(data) {
+			// save for later
+			res.cookie("github", data.data);
+
+			res.redirect("/");
+		});
+	}
+	// already authenticated
+	else if (req.cookies && req.cookies.github) {
+		// use existing token to get github names
+		axios.get("https://api.github.com/user/repos?" + req.cookies.github).then(function(data) {
+			var repos = data.data;
+
+			for (let i = 0; i < repos.length; i++) {
+				console.log(repos[i].full_name);
+			}
+
+			res.sendFile(path.join(__dirname, "./app/public/index.html"));
+		}).catch(function(error) {
+			// auth failed, so get rid of cookie
+			res.clearCookie("github");
+			res.sendFile(path.join(__dirname, "./app/public/test.html"));
+		});
+	}
+	else {
+		// sploosh page
+		res.sendFile(path.join(__dirname, "./app/public/test.html"));
+	}
 });
+
+// public assets
+app.use(express.static("app/public"));
 
 // start localhost
 server.listen(PORT, function() {
-  console.log("App running on port 3000!");
+	console.log("App running on port 3000!");
 });
 
 // workaround to gracefully shut down on windows
