@@ -5,7 +5,9 @@ var React = require("react");
 var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
+import {Link} from 'react-router';
 import dummyData from '../../dummyData';
+
 
 class Sort extends React.Component {
   constructor() {
@@ -14,6 +16,8 @@ class Sort extends React.Component {
     this.state = {
       project: "project1",
       tasks: [],
+      activeColumn: "",
+      sortDirection: ""
 
     };
 
@@ -27,17 +31,23 @@ class Sort extends React.Component {
     this.setState({tasks: dummyData})
   }
 
+
   alphaSort(e, name) {
     var toggle = e.target.getAttribute("value");
+    var id = e.target.getAttribute("id");
     if (toggle === "a") {
       var unSorted = this.state.tasks;
       var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
       e.target.setAttribute("value", "b");
+      this.setState({activeColumn: id});
+      this.setState({sortDirection: "b"});
       this.setState({tasks: sorted});
     } else {
       var unSorted = this.state.tasks;
       var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
       e.target.setAttribute("value", "a");
+      this.setState({activeColumn: id});
+      this.setState({sortDirection: "a"});
       this.setState({tasks: sorted});
     }
 
@@ -96,28 +106,6 @@ class Sort extends React.Component {
   render() {
     return (
       <div>
-        <nav>
-          <div className="nav-wrapper pad">
-            <a href="#!" className="brand-logo logo">triloGira</a>
-            <a href="#" data-activates="mobile-demo" className="button-collapse">
-              <i className="material-icons">menu</i>
-            </a>
-            <ul className="right hide-on-med-and-down">
-              <li>
-
-                <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='dropdown1'>Projects</a>
-                <ul id='dropdown1' className='dropdown-content collapsible' data-collapsible="accordion">
-                  <li>
-                    <a href="#!"></a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="badges.html">New Task</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
         <div className="container">
           <div className="row">
             <div className="col s12">
@@ -132,13 +120,13 @@ class Sort extends React.Component {
               <table className="highlight">
                 <thead>
                   <tr>
-                      <th value="a" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
-                      <th value="a" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
-                      <th value="a" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
-                      <th value="a" onClick={(e)=>this.timeSort(e, "timeEstimate")}>Time Allotment</th>
-                      <th value="a" onClick={(e)=>this.timeSort(e, "timeSpent")}>Time Spent</th>
-                      <th value="a" onClick={(e)=>this.dateSort(e, "dateCreated")}>Date Created</th>
-                      <th value="a" onClick={(e)=>this.dateSort(e, "dateModified")}>Last Update</th>
+                      <th value="a" id="title" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
+                      <th value="a" id="owner" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
+                      <th value="a" id="status" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
+                      <th value="a" id="timeEstimate" onClick={(e)=>this.timeSort(e, "timeEstimate")}>Time Allotment</th>
+                      <th value="a" id="timeSpent" onClick={(e)=>this.timeSort(e, "timeSpent")}>Time Spent</th>
+                      <th value="a" id="dateCreated" onClick={(e)=>this.dateSort(e, "dateCreated")}>Date Created</th>
+                      <th value="a" id="dateModified" onClick={(e)=>this.dateSort(e, "dateModified")}>Last Update</th>
                   </tr>
                 </thead>
 
@@ -146,11 +134,11 @@ class Sort extends React.Component {
                 {/* this is where each task will populate */}
 
                 {this.state.tasks.map(function(task, i) {
-
+                  let url = "/task/" + task.id;
                   return (
 
                           <tr key={i}>
-                            <td>{task.title}</td>
+                            <td><Link to={url}>{task.title}</Link></td>
                             <td>{task.owner}</td>
                             <td>{task.status}</td>
                             <td>{task.timeEstimate}</td>

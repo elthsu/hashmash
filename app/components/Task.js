@@ -5,6 +5,8 @@ var React = require("react");
 var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
+import {Modal, Button, Icon} from 'react-materialize';
+
 
 class Task extends React.Component {
   constructor() {
@@ -14,6 +16,7 @@ class Task extends React.Component {
       project: {},
       tasks: []
     };
+    this.createTask = this.createTask.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +37,12 @@ class Task extends React.Component {
     });
   }
 
+  createTask() {
+    console.log("here")
+  }
+
   render() {
+    console.log(Modal.actions)
 
     var calc = (30/180).toFixed(2);
 
@@ -51,29 +59,6 @@ class Task extends React.Component {
 
 
     return (
-      <div>
-        <nav>
-          <div className="nav-wrapper pad">
-            <a href="#!" className="brand-logo logo">#mash</a>
-            <a href="#" data-activates="mobile-demo" className="button-collapse">
-              <i className="material-icons">menu</i>
-            </a>
-            <ul className="right hide-on-med-and-down">
-              <li>
-
-                <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='projectDrop'>Projects</a>
-                <ul id='projectDrop' className='dropdown-content collapsible' data-collapsible="accordion">
-                  <li>
-                    <a href="#!">{this.state.project.name}</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="badges.html">New Task</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
         <div className="container">
           <div className="row">
           <div className="col s12 pathing">
@@ -141,7 +126,7 @@ class Task extends React.Component {
             </div>
           </div>
         </div>
-      </div>
+      
     );
   }
 }
