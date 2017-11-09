@@ -1,0 +1,199 @@
+
+  * {
+    color: saddlebrown;
+  }
+
+  nav {
+    background: Peru;
+  }
+
+  .btn {
+    background: saddlebrown;
+  }
+
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background: palegoldenrod;
+    color: saddlebrown
+  }
+
+  .logo {
+    font-family: 'Lobster', cursive;
+  }
+
+  .pad {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .dropdown-content li > a {
+    color: saddlebrown;
+  }
+
+  input:not([type]):focus:not([readonly])+label,
+  .form-wrap input[type=text]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=password]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=email]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=url]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=time]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=date]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=datetime]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=tel]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=number]:not(.browser-default):focus:not([readonly])+label,
+  .form-wrap input[type=search]:not(.browser-default):focus:not([readonly]) + label,
+  .form-wrap textarea.materialize-textarea:focus:not([readonly])+label,
+  input[type="search"]:focus:not(.browser-default):not([readonly])+label,
+  .input-field .prefix.active {
+
+    color: saddlebrown; /* after animation color change css */
+
+  }
+
+  .form-wrap input:focus:not([type]):not([readonly]),
+  .form-wrap input[type="text"]:focus:not(.browser-default):not([readonly]),
+  .form-wrap input[type="password"]:focus:not(.browser-default):not([readonly]),
+  input[type="email"]:focus:not(.browser-default):not([readonly]),
+  .form-wrap input[type="url"]:focus:not(.browser-default):not([readonly]),
+  input[type="time"]:focus:not(.browser-default):not([readonly]),
+  .form-wrap input[type="date"]:focus:not(.browser-default):not([readonly]),
+  input[type="datetime"]:focus:not(.browser-default):not([readonly]),
+  .form-wrap input[type="datetime-local"]:focus:not(.browser-default):not([readonly]),
+  input[type="tel"]:focus:not(.browser-default):not([readonly]),
+  .form-wrap input[type="number"]:focus:not(.browser-default):not([readonly]),
+  input[type="search"]:focus:not(.browser-default):not([readonly]),
+  .form-wrap textarea.materialize-textarea:focus:not([readonly]),
+  input.valid:not([type]),
+  input.valid:not([type]):focus,
+  input[type=text].valid:not(.browser-default),
+  input[type=text].valid:not(.browser-default):focus,
+  input[type=password].valid:not(.browser-default),
+  input[type=password].valid:not(.browser-default):focus,
+  input[type=email].valid:not(.browser-default),
+  input[type=email].valid:not(.browser-default):focus,
+  input[type=url].valid:not(.browser-default),
+  input[type=url].valid:not(.browser-default):focus,
+  input[type=time].valid:not(.browser-default),
+  input[type=time].valid:not(.browser-default):focus,
+  input[type=date].valid:not(.browser-default),
+  input[type=date].valid:not(.browser-default):focus,
+  input[type=datetime].valid:not(.browser-default),
+  input[type=datetime].valid:not(.browser-default):focus,
+  input[type=datetime-local].valid:not(.browser-default),
+  input[type=datetime-local].valid:not(.browser-default):focus,
+  input[type=tel].valid:not(.browser-default),
+  input[type=tel].valid:not(.browser-default):focus,
+  input[type=number].valid:not(.browser-default),
+  input[type=number].valid:not(.browser-default):focus,
+  input[type=search].valid:not(.browser-default),
+  input[type=search].valid:not(.browser-default):focus,
+  textarea.materialize-textarea.valid,
+  textarea.materialize-textarea.valid:focus,
+  .select-wrapper.valid>input.select-dropdown,
+  .input-field input[type=text]:focus,
+  .input-field input[type=search]:focus {
+
+    color: saddlebrown;
+    border-bottom: 1px solid saddlebrown;
+    box-shadow: 0 1px 0 0 saddlebrown; /* after animation color change css */
+  }
+
+  .pathing {
+    margin-top: 30px;
+  }
+
+  #taskWin {
+    border: 1px solid Peru;
+    border-radius: 3px;
+    min-height: 600px;
+  }
+
+  #chatWin {
+    border: 1px solid Peru;
+    border-radius: 3px;
+    margin-left: 30px;
+    text-align: right;
+    min-height: 600px;
+    padding-top: 10px;
+  }
+
+  .taskText {
+    padding: 10px 50px 0 50px;
+  }
+
+  .taskDrop {
+    margin: 0;
+    margin-top: 30px;
+  }
+
+  #timeBox {
+    margin-top: 50px;
+    margin-bottom: 0;
+    padding-left: 50px;
+    padding-right: 50px;
+
+  }
+
+  .bar {
+    margin: 5px 50px;
+    width: 87%;
+    height: 35px;
+    background: peru;
+  }
+
+  .progress .determinate {
+    padding-top: 6px;
+    background-color: palegoldenrod;
+    border-left: 1px solid palegoldenrod;
+    border-right: 1px solid palegoldenrod;
+
+    -webkit-animation: pulse 3s infinite ease-in-out;
+    -o-animation: pulse 3s infinite ease-in-out;
+    -ms-animation: pulse 3s infinite ease-in-out;
+    -moz-animation: pulse 3s infinite ease-in-out;
+    animation: pulse 3s infinite ease-in-out;
+  }
+
+  .barText {
+    color: saddlebrown;
+    text-align: center;
+    padding: auto;
+    margin: auto;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .chatMessage {
+    margin: 8px;
+    text-align: center;
+    padding: 10px;
+    background-color: palegoldenrod;
+    border-radius: 25px;
+  }
+
+  #searchBar,
+  #mainPageWrap {
+    border: 1px solid Peru;
+    border-radius: 3px;
+    margin-top: 50px;
+
+  }
+
+  #mainPageWrap {
+    padding: 30px 0;
+  }
+
+  th:hover {
+    cursor: pointer;
+  }
+
+  .material-icons {
+    margin: 0;
+    padding: 0;
+
+  }
