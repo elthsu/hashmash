@@ -4,6 +4,7 @@ var Main = require("./components/Main")
 var Task = require("./components/Task")
 var Test = require("./components/Test")
 var Sort = require("./components/Sort")
+var routes = require("./config/routes")
 
 
-ReactDOM.render(<Sort />, document.getElementById("app"));
+ReactDOM.render(routes, document.getElementById("app"));

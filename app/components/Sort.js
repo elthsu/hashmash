@@ -5,7 +5,9 @@ var React = require("react");
 var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
+import {Link} from 'react-router';
 import dummyData from '../../dummyData';
+
 
 class Sort extends React.Component {
   constructor() {
@@ -104,28 +106,6 @@ class Sort extends React.Component {
   render() {
     return (
       <div>
-        <nav>
-          <div className="nav-wrapper pad">
-            <a href="#!" className="brand-logo logo">triloGira</a>
-            <a href="#" data-activates="mobile-demo" className="button-collapse">
-              <i className="material-icons">menu</i>
-            </a>
-            <ul className="right hide-on-med-and-down">
-              <li>
-
-                <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='dropdown1'>Projects</a>
-                <ul id='dropdown1' className='dropdown-content collapsible' data-collapsible="accordion">
-                  <li>
-                    <a href="#!"></a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="badges.html">New Task</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
         <div className="container">
           <div className="row">
             <div className="col s12">
@@ -154,11 +134,11 @@ class Sort extends React.Component {
                 {/* this is where each task will populate */}
 
                 {this.state.tasks.map(function(task, i) {
-
+                  let url = "/task/" + task.id;
                   return (
 
                           <tr key={i}>
-                            <td>{task.title}</td>
+                            <td><Link to={url}>{task.title}</Link></td>
                             <td>{task.owner}</td>
                             <td>{task.status}</td>
                             <td>{task.timeEstimate}</td>
