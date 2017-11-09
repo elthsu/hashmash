@@ -1,6 +1,8 @@
 var express = require("express");
+var cookieParser = require('cookie-parser');
 var mongojs = require("mongojs");
-var q = require("q");
+var path = require("path");
+var axios = require("axios");
 
 // mongo db
 var db = require("./schema.js");
@@ -14,22 +16,39 @@ var io = require('socket.io')(server);
 io.on("connection", function(socket) {
 	// client logged in
 	socket.on("login", function(data) {
-		var obj = {};
+		// who's got the cookie
+		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*)?;/)[1]);
 
-		// return list of projects for this user + task properties from db
-		// TODO: make unique per user
-		q.fcall(db.projects.find({}, {name: 1}, function(err, docs) {
-			obj.projects = docs;
-		})).then(db.types.find({}, function(err, docs) {
-			obj.types = docs;
-		})).then(db.statuses.find({}, function(err, docs) {
-			obj.statuses = docs;
-		})).then(db.priorities.find({}, function(err, docs) {
-			obj.priorities = docs;
+		// get repo names from github
+		axios.get("https://api.github.com/user/repos?" + cookie).then(function(data) {
+			var repos = data.data;
+			var obj = {
+				projects: []
+			};
 
-			// promise chain complete, send back to FE
-			socket.emit("init", obj);
-		}));
+			for (let i = 0; i < repos.length; i++) {
+				obj.projects.push({
+					name: repos[i].full_name
+				});
+			}
+
+			// consolidate db queries into promise chain
+			function promiseMe(type) {
+				return new Promise(function(resolve, reject) {
+					db[type].find({}, function(err, docs) {
+						obj[type] = docs;
+						resolve(true);
+					});
+				});
+			}
+
+			promiseMe("types").then(promiseMe("statuses").then(promiseMe("priorities").then(function() {
+				// promise chain complete, send back to FE
+				socket.emit("init", obj);
+			})));
+		}).catch(function(error) {
+			console.log("login error");
+		});
 	});
 
 	// client selected a project to "join"
@@ -193,16 +212,45 @@ io.on("connection", function(socket) {
 	});
 });
 
-// public files and routes
-app.use(express.static("app/public"));
+app.use(cookieParser());
 
 app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "./app/public/index.html"));
+	// redirected from github
+	if (req.query && req.query.code) {
+		axios.post("https://github.com/login/oauth/access_token", {
+			code: req.query.code,
+			client_id: "5e9ec4eec65e92a74459",
+			client_secret: "fb7522788ea96b738012350f52c8d7259dead5ef"
+		}).then(function(data) {
+			// save for later
+			res.cookie("github", data.data);
+
+			res.redirect("/");
+		});
+	}
+	// already authenticated
+	else if (req.cookies && req.cookies.github) {
+		// use existing token to verify login
+		axios.get("https://api.github.com/user?" + req.cookies.github).then(function(data) {
+			res.sendFile(path.join(__dirname, "./app/public/index.html"));
+		}).catch(function(error) {
+			// auth failed, so get rid of cookie
+			res.clearCookie("github");
+			res.sendFile(path.join(__dirname, "./app/public/gitAuth.html"));
+		});
+	}
+	else {
+		// sploosh page
+		res.sendFile(path.join(__dirname, "./app/public/gitAuth.html"));
+	}
 });
+
+// public assets
+app.use(express.static("app/public"));
 
 // start localhost
 server.listen(PORT, function() {
-  console.log("App running on port 3000!");
+	console.log("App running on port 3000!");
 });
 
 // workaround to gracefully shut down on windows
