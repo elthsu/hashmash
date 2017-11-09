@@ -104,7 +104,7 @@ class Task extends React.Component {
                   <div className="col l6 center"><h5>Time Allocated: 03hr 00min</h5></div>
               </div>
               <div className="row">
-                <div className="col l12">
+                <div className="col s12">
                   <div className="progress bar z-depth-1">
                       <div className="determinate" style={bar}>
                         <div className="barText">Time Used</div>
