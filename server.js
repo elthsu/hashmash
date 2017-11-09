@@ -3,7 +3,6 @@ var cookieParser = require('cookie-parser');
 var mongojs = require("mongojs");
 var path = require("path");
 var axios = require("axios");
-var q = require("q");
 
 // mongo db
 var db = require("./schema.js");
@@ -17,22 +16,39 @@ var io = require('socket.io')(server);
 io.on("connection", function(socket) {
 	// client logged in
 	socket.on("login", function(data) {
-		var obj = {};
+		// who's got the cookie
+		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*)?;/)[1]);
 
-		// return list of projects for this user + task properties from db
-		// TODO: make unique per user
-		q.fcall(db.projects.find({}, {name: 1}, function(err, docs) {
-			obj.projects = docs;
-		})).then(db.types.find({}, function(err, docs) {
-			obj.types = docs;
-		})).then(db.statuses.find({}, function(err, docs) {
-			obj.statuses = docs;
-		})).then(db.priorities.find({}, function(err, docs) {
-			obj.priorities = docs;
+		// get repo names from github
+		axios.get("https://api.github.com/user/repos?" + cookie).then(function(data) {
+			var repos = data.data;
+			var obj = {
+				projects: []
+			};
 
-			// promise chain complete, send back to FE
-			socket.emit("init", obj);
-		}));
+			for (let i = 0; i < repos.length; i++) {
+				obj.projects.push({
+					name: repos[i].full_name
+				});
+			}
+
+			// consolidate db queries into promise chain
+			function promiseMe(type) {
+				return new Promise(function(resolve, reject) {
+					db[type].find({}, function(err, docs) {
+						obj[type] = docs;
+						resolve(true);
+					});
+				});
+			}
+
+			promiseMe("types").then(promiseMe("statuses").then(promiseMe("priorities").then(function() {
+				// promise chain complete, send back to FE
+				socket.emit("init", obj);
+			})));
+		}).catch(function(error) {
+			console.log("login error");
+		});
 	});
 
 	// client selected a project to "join"
@@ -214,24 +230,18 @@ app.get("/", function(req, res) {
 	}
 	// already authenticated
 	else if (req.cookies && req.cookies.github) {
-		// use existing token to get github names
-		axios.get("https://api.github.com/user/repos?" + req.cookies.github).then(function(data) {
-			var repos = data.data;
-
-			for (let i = 0; i < repos.length; i++) {
-				console.log(repos[i].full_name);
-			}
-
+		// use existing token to verify login
+		axios.get("https://api.github.com/user?" + req.cookies.github).then(function(data) {
 			res.sendFile(path.join(__dirname, "./app/public/index.html"));
 		}).catch(function(error) {
 			// auth failed, so get rid of cookie
 			res.clearCookie("github");
-			res.sendFile(path.join(__dirname, "./app/public/test.html"));
+			res.sendFile(path.join(__dirname, "./app/public/gitAuth.html"));
 		});
 	}
 	else {
 		// sploosh page
-		res.sendFile(path.join(__dirname, "./app/public/test.html"));
+		res.sendFile(path.join(__dirname, "./app/public/gitAuth.html"));
 	}
 });
 
