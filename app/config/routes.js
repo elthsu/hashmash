@@ -10,6 +10,7 @@ import {browserHistory} from "react-router";
 import Main from "../components/Main";
 import Sort from "../components/Sort";
 import Task from "../components/Task";
+import Test from "../components/Test";
 
 
 // Export the Routes
@@ -20,6 +21,7 @@ module.exports = (
 
       {/* If user selects Search or Saved show the appropriate component */}
       <Route path="sort" component={Sort} />
+      <Route path="test" component={Test} />
       <Route path="task/:id" component={Task} />
 
 
