@@ -65,14 +65,14 @@ render() {
                     <span>Priority: </span>
 
                       <br />
-                      <input name="new-priority" type="radio" id="critical" />
+                      <input value="critical" name="newPriority" type="radio" id="critical" />
                       <label htmlFor="critical">Critical</label>
                       <br />
-                      <input name="new-priority" type="radio" id="normal" />
+                      <input value="normal" name="newPriority" type="radio" id="normal" />
                       <label htmlFor="normal">Normal</label>
                       <br />
 
-                      <input name="new-priority" type="radio" id="backburner" />
+                      <input value="backburner" name="newPriority" type="radio" id="backburner" />
                       <label htmlFor="backburner">Backburner</label>
 
                     </div>
@@ -83,24 +83,24 @@ render() {
 
 
 
-                          <input name="new-priority" type="radio" id="to do" />
+                          <input value="to do" name="newStatus" type="radio" id="to do" />
                           <label htmlFor="to do">To Do</label>
                           <br />
 
-                          <input name="new-priority" type="radio" id="in progress" />
+                          <input value="in progress" name="newStatus" type="radio" id="in progress" />
                           <label htmlFor="in progress">In Progress</label>
 
                           <br />
 
-                          <input name="new-priority" type="radio" id="blocked" />
+                          <input value="blocked" name="newStatus" type="radio" id="blocked" />
                           <label htmlFor="blocked">Blocked</label>
                           <br />
 
-                          <input name="new-priority" type="radio" id="in review" />
+                          <input value="in review" name="newStatus" type="radio" id="in review" />
                           <label htmlFor="in review">In Review</label>
                           <br />
 
-                          <input name="new-priority" type="radio" id="done" />
+                          <input value="done" name="newStatus" type="radio" id="done" />
                           <label htmlFor="done">Done</label>
 
                         </div>
@@ -112,15 +112,15 @@ render() {
                         <br />
 
 
-                          <input name="new-type" type="radio" id="feature" />
+                          <input value="feature" name="newType" type="radio" id="feature" />
                           <label htmlFor="feature">Feature</label>
                           <br />
 
-                          <input name="new-type" type="radio" id="bug" />
+                          <input value="bug" name="newType" type="radio" id="bug" />
                           <label htmlFor="bug">Bug</label>
                           <br />
 
-                          <input name="new-type" type="radio" id="research" />
+                          <input value="research" name="newType" type="radio" id="research" />
                           <label htmlFor="research">Research</label>
 
                           <br />
@@ -130,7 +130,7 @@ render() {
 
 
                           <div className="input-field col s2">
-                            <input placeholder="" id="new-estimate" type="number" className="validate"/>
+                            <input placeholder="" name="newEstimate" id="new-estimate" type="number" className="validate"/>
                             <label htmlFor="new-number">Time Est. (Min)</label>
                           </div>
 
