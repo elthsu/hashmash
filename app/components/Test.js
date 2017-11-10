@@ -47,6 +47,12 @@ class Test extends React.Component {
 			// if data is null, we know it was deleted
 			console.log("task #1", data);
 		});
+
+		// client receives new list of users for drop-down
+		// triggered once when joining/switching projects
+		socket.on("contributors", (data) => {
+			console.log("contributors", data);
+		});
 	}
 
 	_selectProject(event) {
@@ -102,8 +108,8 @@ class Test extends React.Component {
 
 				<select style={{display:"block"}} onChange={this._selectProject}>
 					<option></option>
-					<option value="test1">test1</option>
-					<option value="test2">test2</option>
+					<option value="elthsu/triloGira">elthsu/triloGira</option>
+					<option value="clarknielsen/clarknielsen.github.io">clarknielsen/clarknielsen.github.io</option>
 				</select>
 
 				<button onClick={this._newTask}>make new task for this project</button>
