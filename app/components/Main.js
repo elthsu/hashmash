@@ -23,6 +23,7 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+    
 		// when user connects to server, request initial data
 		socket.on("connect", function(data) {
 			socket.emit("login", "...");
@@ -44,6 +45,8 @@ class Main extends React.Component {
 		// triggered when user "joins" a project or tasks have been updated
 		socket.on("tasks", (data) => {
 			console.log("all tasks", data);
+      this.setState({project: data})
+
 		});
 
 		// client receives update related to a single task
@@ -57,7 +60,6 @@ class Main extends React.Component {
 
 
   _selectProject(event) {
-    console.log(event)
     if (event) {
       // sets user up to start getting updates on this project
       socket.emit("join", event);
@@ -65,9 +67,9 @@ class Main extends React.Component {
   }
 
   _newTask(task) {
-    console.log(task)
     // won't work until user has joined a "room" (i.e. selected a project)
     socket.emit("new", task);
+
   }
 
   _updateTask() {
@@ -99,6 +101,7 @@ class Main extends React.Component {
   }
 
   render() {
+
     return (
       <div>
       <Nav _newTask = {this._newTask} _selectProject={this._selectProject}
@@ -108,6 +111,6 @@ class Main extends React.Component {
     );
   }
 }
-
+console.log(Main.constructor.state)
 // Export the component back for use in other files
 module.exports = Main;

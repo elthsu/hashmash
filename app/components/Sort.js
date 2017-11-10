@@ -14,7 +14,7 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      project: "project1",
+      project: "elthsu/triloGira",
       tasks: [],
       activeColumn: "",
       sortDirection: ""
@@ -27,7 +27,9 @@ class Sort extends React.Component {
 
   }
 
+
   componentDidMount() {
+    console.log(this.props.state)
     this.setState({tasks: dummyData})
   }
 
