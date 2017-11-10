@@ -270,3 +270,48 @@
     width: 20px;
     border-radius: 4px;
   }
+
+  [type="radio"]:checked+label:after,
+  [type="radio"].with-gap:checked+label:after,
+  [type="radio"]:checked+label:after,
+  [type="radio"].with-gap:checked+label:before,
+  [type="radio"].with-gap:checked+label:after {
+
+    background-color: saddlebrown;
+    border-color: saddlebrown;
+  }
+
+  input:not([type]):focus:not([readonly]),
+  input[type=text]:not(.browser-default):focus:not([readonly]),
+  input[type=password]:not(.browser-default):focus:not([readonly]),
+  input[type=email]:not(.browser-default):focus:not([readonly]),
+  input[type=url]:not(.browser-default):focus:not([readonly]),
+  input[type=time]:not(.browser-default):focus:not([readonly]),
+  input[type=date]:not(.browser-default):focus:not([readonly]),
+  input[type=datetime]:not(.browser-default):focus:not([readonly]),
+  input[type=datetime-local]:not(.browser-default):focus:not([readonly]),
+  input[type=tel]:not(.browser-default):focus:not([readonly]),
+  input[type=number]:not(.browser-default):focus:not([readonly]),
+  input[type=search]:not(.browser-default):focus:not([readonly]),
+  textarea.materialize-textarea:focus:not([readonly]) {
+
+
+    border-bottom: 1px solid saddlebrown;
+    -webkit-box-shadow: 0 1px 0 0 saddlebrown;
+    box-shadow: 0 1px 0 0 saddlebrown;
+  }
+
+  input[type=text]:not(.browser-default):focus:not([readonly])+label,
+  input[type=number]:not(.browser-default):focus:not([readonly])+label {
+    color: saddlebrown;
+  }
+
+  #add-task {
+
+    color: white;
+  }
+
+  #add-task:hover {
+
+    color: saddlebrown;
+  }

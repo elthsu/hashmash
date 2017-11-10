@@ -120,6 +120,7 @@ class Sort extends React.Component {
               <table className="highlight">
                 <thead>
                   <tr>
+                      <th value="b" id="id" onClick={(e)=>this.timeSort(e, "id")}>ID</th>
                       <th value="a" id="title" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
                       <th value="a" id="owner" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
                       <th value="a" id="status" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
@@ -138,6 +139,7 @@ class Sort extends React.Component {
                   return (
 
                           <tr key={i}>
+                            <td>{task.id}</td>
                             <td><Link to={url}>{task.title}</Link></td>
                             <td>{task.owner}</td>
                             <td>{task.status}</td>
