@@ -95,7 +95,7 @@ class Test extends React.Component {
 
 	render() {
 		return (
-			<div>				
+			<div>
 				<p>Initial data: {JSON.stringify(this.state.initialData)}</p>
 
 				Select a project:
@@ -113,7 +113,7 @@ class Test extends React.Component {
 				<button onClick={this._deleteTask}>delete task in this project</button>
 
 				<p>
-					<input type="text" id="chat" /> 
+					<input type="text" id="chat" />
 					<button onClick={this._sendChat}>Send Chat</button>
 				</p>
 			</div>
