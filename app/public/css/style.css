@@ -83,6 +83,8 @@
   input.valid:not([type]):focus,
   input[type=text].valid:not(.browser-default),
   input[type=text].valid:not(.browser-default):focus,
+  textarea.valid:not(.browser-default),
+  textarea.valid:not(.browser-default):focus,
   input[type=password].valid:not(.browser-default),
   input[type=password].valid:not(.browser-default):focus,
   input[type=email].valid:not(.browser-default),
@@ -302,16 +304,33 @@
   }
 
   input[type=text]:not(.browser-default):focus:not([readonly])+label,
-  input[type=number]:not(.browser-default):focus:not([readonly])+label {
+  input[type=number]:not(.browser-default):focus:not([readonly])+label,
+  textarea.materialize-textarea:focus:not([readonly])+label {
     color: saddlebrown;
   }
 
   #add-task {
-
     color: white;
+
   }
 
   #add-task:hover {
 
     color: saddlebrown;
+  }
+
+  .modal .modal-footer {
+    text-align: center;
+    height: 80px;
+  }
+
+  #newTaskRadio1,
+  #newTaskRadio2,
+  #newTaskRadio3 {
+    padding-left: 90px;
+  }
+
+  .modal h4 {
+    text-align: center;
+
   }
