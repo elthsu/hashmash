@@ -217,6 +217,14 @@ io.on("connection", function(socket) {
 			io.to(socket.room).emit("task #" + data.id, task);
 		});
 	});
+
+	// clean up
+	socket.once("disconnect", function(data) {
+		if (socket.room)
+			socket.leave(socket.room);
+
+		socket.removeAllListeners();
+	});
 });
 
 app.use(cookieParser());
@@ -250,6 +258,12 @@ app.get("/", function(req, res) {
 		// sploosh page
 		res.sendFile(path.join(__dirname, "./app/public/gitAuth.html"));
 	}
+});
+
+app.get("/logout", function(req, res) {
+	// wipe cookies and redirect to login page
+	res.clearCookie("github");
+	res.redirect("/");
 });
 
 // public assets
