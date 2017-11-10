@@ -335,3 +335,8 @@
     text-align: center;
 
   }
+
+  #projectDrop {
+
+    width: 290px !important;
+  }
