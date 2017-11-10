@@ -47,8 +47,12 @@ class Nav extends React.Component {
       [event.target.name]: event.target.value
     });
 
-    this.setState({
-      newTask: {
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit() {
+    this.props._newTask(
+      {
         title: this.state.newTitle,
         description: this.state.newDescription,
         owner: this.state.newDeveloper,
@@ -57,23 +61,17 @@ class Nav extends React.Component {
         type: this.state.newType,
         timeEstimate: this.state.newEstimate
       }
-    });
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit() {
-    this.props._newTask(this.state.newTask);
+    );
   }
 
   chooseProject(event) {
     var project = event.target.getAttribute("value");
-    this.props._selectProject(project)
+    this.props._selectProject(project);
   }
 
   chooseCollaborator(event) {
     var collaborator = event.target.getAttribute("value");
-    this.props._selectCollaborator(collaborator)
+    this.props._selectCollaborator(collaborator);
   }
 
   render() {
