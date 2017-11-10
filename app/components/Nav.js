@@ -41,8 +41,6 @@ render() {
             <ul id='projectDrop' className='dropdown-content collapsible' data-collapsible="accordion">
               <li>
                 <a href="#!">{this.state.project.name}</a>
-                <a href="#!">{this.state.project.name}</a>
-                <a href="#!">{this.state.project.name}</a>
               </li>
             </ul>
           </li>
