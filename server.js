@@ -17,7 +17,7 @@ io.on("connection", function(socket) {
 	// client logged in
 	socket.on("login", function(data) {
 		// who's got the cookie
-		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*)?;/)[1]);
+		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*bearer)/)[1]);
 
 		// get repo names from github
 		axios.get("https://api.github.com/user/repos?" + cookie).then(function(data) {
@@ -54,7 +54,7 @@ io.on("connection", function(socket) {
 	// client selected a project to "join"
 	socket.on("join", function(data) {
 		// who's got the cookie
-		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*)?;/)[1]);
+		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*bearer)/)[1]);
 
 		// leave original room, if in one
 		if (socket.room)
