@@ -5,6 +5,9 @@ var React = require("react");
 var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
+// Moment.js
+var moment = require('moment');
+
 import {Link} from 'react-router';
 import dummyData from '../../dummyData';
 
@@ -29,10 +32,6 @@ class Sort extends React.Component {
 
   componentWillReceiveProps(props) {
     this.setState({tasks: props.tasks});
-  }
-
-  componentWillUnmount() {
-
   }
 
 
@@ -152,8 +151,8 @@ class Sort extends React.Component {
                             <td>{task.status}</td>
                             <td>{task.timeEstimate}</td>
                             <td>{task.timeSpent}</td>
-                            <td>{task.dateCreated}</td>
-                            <td>{task.dateModified}</td>
+                            <td>{moment(task.dateCreated).format("YYYY-MM-DD hh:mm A")}</td>
+                            <td>{moment(task.dateModified).format("YYYY-MM-DD hh:mm A")}</td>
                           </tr>
 
                         )
