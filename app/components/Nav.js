@@ -7,6 +7,7 @@ var socket = io('http://localhost:3000');
 
 import {Modal, Button, Icon} from 'react-materialize';
 
+
 class Nav extends React.Component {
 
   constructor() {
@@ -68,7 +69,7 @@ render() {
   <div>
     <nav>
       <div className="nav-wrapper pad">
-        <a href="#!" className="brand-logo logo">triloGira</a>
+        <a href="#!" className="brand-logo logo">#mash</a>
         <a href="#" data-activates="mobile-demo" className="button-collapse">
           <i className="material-icons">menu</i>
         </a>
@@ -89,7 +90,9 @@ render() {
           <li>
             <Modal
             header='New Task'
-            trigger={<Button waves='light'>New Task</Button>} actions={<Button className="btn waves-effect waves-light btn-flat modal-action modal-close" waves='light' id="add-task" onClick={this.handleSubmit}>add task</Button>}>
+
+            trigger={<a waves='light'>New Task</a>} actions={<Button className="btn waves-effect waves-light btn-flat modal-action modal-close" waves='light' id="add-task" onClick={this.handleSubmit}>add task</Button>}>
+
             <div className="row">
               <form onChange={this.createTask} className="col s12">
                 <div className="row">
@@ -108,14 +111,16 @@ render() {
 
                       <br />
                       <input value="critical" name="newPriority" type="radio" id="critical" />
-                      <label htmlFor="critical">critical</label>
+
+                      <label htmlFor="critical">Critical</label>
                       <br />
-                      <input value="normal" name="newPriority"  type="radio" id="normal" />
-                      <label htmlFor="normal">normal</label>
+                      <input value="normal" name="newPriority" type="radio" id="normal" />
+                      <label htmlFor="normal">Normal</label>
                       <br />
 
                       <input value="backburner" name="newPriority" type="radio" id="backburner" />
-                      <label htmlFor="backburner">backburner</label>
+                      <label htmlFor="backburner">Backburner</label>
+
 
                     </div>
 
@@ -126,24 +131,28 @@ render() {
 
 
                           <input value="to do" name="newStatus" type="radio" id="to do" />
-                          <label htmlFor="to do">to do</label>
+
+                          <label htmlFor="to do">To Do</label>
                           <br />
 
                           <input value="in progress" name="newStatus" type="radio" id="in progress" />
-                          <label htmlFor="in progress">in progress</label>
+                          <label htmlFor="in progress">In Progress</label>
+
 
                           <br />
 
                           <input value="blocked" name="newStatus" type="radio" id="blocked" />
-                          <label htmlFor="blocked">blocked</label>
+
+                          <label htmlFor="blocked">Blocked</label>
                           <br />
 
                           <input value="in review" name="newStatus" type="radio" id="in review" />
-                          <label htmlFor="in review">in review</label>
+                          <label htmlFor="in review">In Review</label>
                           <br />
 
                           <input value="done" name="newStatus" type="radio" id="done" />
-                          <label htmlFor="done">done</label>
+                          <label htmlFor="done">Done</label>
+
 
                         </div>
 
@@ -155,15 +164,17 @@ render() {
 
 
                           <input value="feature" name="newType" type="radio" id="feature" />
-                          <label htmlFor="feature">feature</label>
+
+                          <label htmlFor="feature">Feature</label>
                           <br />
 
                           <input value="bug" name="newType" type="radio" id="bug" />
-                          <label htmlFor="bug">bug</label>
+                          <label htmlFor="bug">Bug</label>
                           <br />
 
                           <input value="research" name="newType" type="radio" id="research" />
-                          <label htmlFor="research">research</label>
+                          <label htmlFor="research">Research</label>
+
 
                           <br />
 
@@ -173,7 +184,9 @@ render() {
 
                           <div className="input-field col s2">
                             <input placeholder="" name="newEstimate" id="new-estimate" type="number" className="validate"/>
-                            <label htmlFor="new-number">time est. (min)</label>
+
+                            <label htmlFor="new-number">Time Est. (Min)</label>
+
                           </div>
 
                           </div>
