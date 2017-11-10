@@ -14,7 +14,7 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      project: "elthsu/triloGira",
+      project: {},
       tasks: [],
       activeColumn: "",
       sortDirection: ""
@@ -27,10 +27,12 @@ class Sort extends React.Component {
 
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({tasks: props.tasks});
+  }
 
-  componentDidMount() {
-    console.log(this.props.state)
-    this.setState({tasks: dummyData})
+  componentWillUnmount() {
+
   }
 
 
@@ -137,6 +139,7 @@ class Sort extends React.Component {
                 {/* this is where each task will populate */}
 
                 {this.state.tasks.map(function(task, i) {
+                  //console.log(this.state.tasks);
                   let url = "/task/" + task.id;
                   return (
 

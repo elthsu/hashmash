@@ -18,12 +18,15 @@ class Main extends React.Component {
       project: {},
       tasks: [],
       newTask: {},
-      allProjects: []
+      allProjects: [],
+      currentTask: {}
     };
+
+    this._selectTask = this._selectTask.bind(this);
   }
 
   componentDidMount() {
-    
+
 		// when user connects to server, request initial data
 		socket.on("connect", function(data) {
 			socket.emit("login", "...");
@@ -45,7 +48,7 @@ class Main extends React.Component {
 		// triggered when user "joins" a project or tasks have been updated
 		socket.on("tasks", (data) => {
 			console.log("all tasks", data);
-      this.setState({project: data})
+      this.setState({tasks: data})
 
 		});
 
@@ -100,17 +103,22 @@ class Main extends React.Component {
     });
   }
 
-  render() {
+  _selectTask(taskId) {
+    this.setState({currentTask: taskId});
+  }
 
+  render() {
     return (
       <div>
       <Nav _newTask = {this._newTask} _selectProject={this._selectProject}
       allProjects = {this.state.allProjects}/>
-      {this.props.children}
+
+      {this.props.children && React.cloneElement(this.props.children, {
+      tasks: this.state.tasks, _selectTask: this._selectTask
+})}
     </div>
     );
   }
 }
-console.log(Main.constructor.state)
 // Export the component back for use in other files
 module.exports = Main;

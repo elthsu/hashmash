@@ -14,12 +14,18 @@ class Task extends React.Component {
 
     this.state = {
       project: {},
-      tasks: []
+      tasks: [],
+      currentTask: {},
+      chat: []
     };
-    this.createTask = this.createTask.bind(this);
   }
 
   componentDidMount() {
+    var taskId = this.props.params.id - 1;
+    var currentTask = this.props.tasks[taskId];
+    console.log(currentTask);
+    this.setState({currentTask: currentTask});
+    this.setState({chat: ["hurry up!", "are you almost done?"]});
     // when user connects to server, try to join room based on project name
     socket.on("connect", function(data) {
       socket.emit("join", "test");
@@ -37,11 +43,13 @@ class Task extends React.Component {
     });
   }
 
-  createTask() {
-    console.log("here")
+  componentWillReceiveProps(props) {
+    console.log(props)
   }
 
+
   render() {
+    console.log(this.state.chat)
     console.log(Modal.actions)
 
     var calc = (30/180).toFixed(2);
@@ -62,18 +70,18 @@ class Task extends React.Component {
         <div className="container">
           <div className="row">
           <div className="col s12 pathing">
-            <h5>PROJECT NAME > TASK NAME</h5>
+            <h5>PROJECT NAME > {this.state.currentTask.title}</h5>
           </div>
           </div>
           <div className="row">
             <div id="taskWin" className="col l8 z-depth-5">
-              <h5 className="taskText">ID: #1</h5>
-              <h5 className="taskText">FINISH EVERYTHING</h5>
-              <h5 className="taskText">Developer: Paige Pittman</h5>
-              <h6 className="taskText">Description:<br />Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Donec sollicitudin molestie malesuada. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Sed porttitor lectus nibh. Pellentesque in ipsum id orci porta dapibus. Sed porttitor lectus nibh. Cras ultricies ligula sed magna dictum porta. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h6>
+              <h5 className="taskText">ID: {this.state.currentTask.id}</h5>
+              <h5 className="taskText">{this.state.currentTask.title}</h5>
+              <h5 className="taskText">Developer: {this.state.currentTask.owner}</h5>
+              <h6 className="taskText">Description:<br />{this.state.currentTask.description}</h6>
               <div className="row center">
                 <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='priorityDrop'>Priority</a>
+                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='priorityDrop'>{this.state.currentTask.priority}</a>
                   <ul id='priorityDrop' className='dropdown-content'>
                     <li><a href="#!">Critical</a></li>
                     <li><a href="#!">Normal</a></li>
@@ -81,7 +89,7 @@ class Task extends React.Component {
                   </ul>
                 </div>
                 <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='statusDrop'>Status</a>
+                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='statusDrop'>{this.state.currentTask.status}</a>
                   <ul id='statusDrop' className='dropdown-content'>
                     <li><a href="#!">To Do</a></li>
                     <li><a href="#!">In Progress</a></li>
@@ -91,7 +99,7 @@ class Task extends React.Component {
                   </ul>
                 </div>
                 <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='typeDrop'>Type</a>
+                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='typeDrop'>{this.state.currentTask.type}</a>
                   <ul id='typeDrop' className='dropdown-content'>
                     <li><a href="#!">Feature</a></li>
                     <li><a href="#!">Bug</a></li>
@@ -101,7 +109,7 @@ class Task extends React.Component {
               </div>
               <div id="timeBox" className="row">
                   <div className="col l6"><h5>Time Used: 02hr 41min</h5></div>
-                  <div className="col l6 center"><h5>Time Allocated: 03hr 00min</h5></div>
+                  <div className="col l6 center"><h5>Time Allocated: {this.state.currentTask.timeEstimate}</h5></div>
               </div>
               <div className="row">
                 <div className="col s12">
@@ -114,19 +122,22 @@ class Task extends React.Component {
               </div>
               <div className="row">
                 <div className="col l12">
-                  <h6 className="taskText">Date Created: 2017-11-06 08:00:00</h6>
-                  <h6 className="taskText">Date Last Updated: 2017-11-06 10:00:00</h6>
+                  <h6 className="taskText">Date Created: {this.state.currentTask.dateCreated}</h6>
+                  <h6 className="taskText">Date Last Updated: {this.state.currentTask.dateModified}</h6>
                 </div>
               </div>
             </div>
             <div className="col l1"></div>
             <div id="chatWin" className="col l3 z-depth-5">
-              <p className="chatMessage">Paige, why aren't you done with this yet?</p>
-              <p className="chatMessage">We don't have all day!!!</p>
+              {this.state.chat.map(function(chat, i) {
+                return (
+                  <p className="chatMessage">{chat}</p>
+                )
+              })}
             </div>
           </div>
         </div>
-      
+
     );
   }
 }

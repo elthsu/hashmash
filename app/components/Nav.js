@@ -6,7 +6,7 @@ var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
 import {Modal, Button, Icon} from 'react-materialize';
-
+import {Link} from "react-router";
 
 class Nav extends React.Component {
 
@@ -42,21 +42,18 @@ createTask(event) {
 
 this.setState({[event.target.name]: event.target.value});
 
-this.setState({newTask: {
-  title: this.state.newTitle,
-  description: this.state.newDescription,
-  priority: this.state.newPriority,
-  status: this.state.newStatus,
-  type: this.state.newType,
-  timeEstimate: this.state.newEstimate
-  }
-});
-
 this.handleSubmit = this.handleSubmit.bind(this);
 }
 
 handleSubmit() {
-  this.props._newTask(this.state.newTask);
+  this.props._newTask({
+    title: this.state.newTitle,
+    description: this.state.newDescription,
+    priority: this.state.newPriority,
+    status: this.state.newStatus,
+    type: this.state.newType,
+    timeEstimate: this.state.newEstimate
+    });
 }
 
 chooseProject (event) {
@@ -80,7 +77,7 @@ render() {
               {this.state.allProjects.map((project, i) => {
                 return (
                   <li>
-                    <a value={project.name} onClick={(event)=>this.chooseProject(event)} href="#!">{project.name}</a>
+                    <Link to="/sort" value={project.name} onClick={(event)=>this.chooseProject(event)} href="#!">{project.name}</Link>
                   </li>
                 )
               })
