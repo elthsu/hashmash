@@ -53,7 +53,8 @@ io.on("connection", function(socket) {
 
 	// client selected a project to "join"
 	socket.on("join", function(data) {
-		console.log(`client connected to project "${data}"`);
+		// who's got the cookie
+		var cookie = decodeURIComponent(socket.request.headers.cookie.match(/github=(.*)?;/)[1]);
 
 		// leave original room, if in one
 		if (socket.room)
@@ -77,6 +78,14 @@ io.on("connection", function(socket) {
 
 				db.projects.insert(proj);
 			}
+		});
+
+		// also get list of contributors for drop-down
+		axios.get(`https://api.github.com/repos/${socket.room}/contributors?${cookie}`).then(function(data) {
+			// send user list back to FE
+			socket.emit("contributors", data.data);
+		}).catch(function(error) {
+			console.log("failed to get collaborators");
 		});
 	});
 
@@ -171,8 +180,6 @@ io.on("connection", function(socket) {
 			update: {$pull: {tasks: {id: data.id}}},
 			new: true
 		}, function(err, docs) {
-			console.log(docs)
-
 			io.to(socket.room).emit("tasks", docs.tasks);
 
 			// broadcast delete flag
@@ -201,7 +208,6 @@ io.on("connection", function(socket) {
 			},
 			new: true
 		}, function(err, docs) {
-			console.log(docs);
 			// find the actual task that was updated, 'cause mongo too dumb to do it for me
 			var task = docs.tasks.find((t) => {
 				return t.id === data.id;
