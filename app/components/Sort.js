@@ -111,14 +111,16 @@ class Sort extends React.Component {
     return (
       <div>
         <div className="container">
-          <div className="row">
-            <div className="col s12">
-              <div className="input-field col s12">
+          <div id="searchBar" className="row z-depth-5">
+            <div className="col s10 offset-s1">
+              <div className="input-field">
                 <i className="material-icons prefix">search</i>
                 <input id="search" type="search" className="validate"/>
                 <label htmlFor="search">Search</label>
               </div>
             </div>
+          </div>
+          <div id="mainPageWrap" className="row z-depth-5">
             <div className="col s1"></div>
             <div className="col s10">
               <table className="highlight">
