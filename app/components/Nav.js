@@ -14,14 +14,53 @@ class Nav extends React.Component {
 
     this.state = {
     project: {},
-    tasks: []
+    allProjects: [],
+    tasks: [],
+    newTask: {},
+    newTitle: "",
+    newPriority: "",
+    newDescription: "",
+    newStatus: "",
+    newType: "",
+    newEstimate: ""
   };
 
   this.createTask = this.createTask.bind(this);
+  this.chooseProject = this.chooseProject.bind(this);
 }
 
-createTask() {
-  console.log("here")
+componentWillReceiveProps(props) {
+  this.setState({allProjects: props.allProjects});
+}
+
+componentDidUpdate(prevProps, prevState) {
+  console.log(this.state.allProjects);
+}
+
+createTask(event) {
+
+this.setState({[event.target.name]: event.target.value});
+
+this.setState({newTask: {
+  title: this.state.newTitle,
+  description: this.state.newDescription,
+  priority: this.state.newPriority,
+  status: this.state.newStatus,
+  type: this.state.newType,
+  timeEstimate: this.state.newEstimate
+  }
+});
+
+this.handleSubmit = this.handleSubmit.bind(this);
+}
+
+handleSubmit() {
+  this.props._newTask(this.state.newTask);
+}
+
+chooseProject (event) {
+  var project = event.target.getAttribute("value");
+  this.props._selectProject(project)
 }
 
 render() {
@@ -35,27 +74,31 @@ render() {
         </a>
         <ul className="right hide-on-med-and-down">
           <li>
-
             <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='projectDrop'>Projects</a>
             <ul id='projectDrop' className='dropdown-content collapsible' data-collapsible="accordion">
-              <li>
-                <a href="#!">{this.state.project.name}</a>
-              </li>
+              {this.state.allProjects.map((project, i) => {
+                return (
+                  <li>
+                    <a value={project.name} onClick={(event)=>this.chooseProject(event)} href="#!">{project.name}</a>
+                  </li>
+                )
+              })
+            }
             </ul>
           </li>
           <li>
             <Modal
             header='New Task'
-            trigger={<Button waves='light'>New Task</Button>} actions={<Button className="btn waves-effect waves-light btn-flat modal-action modal-close" waves='light' id="add-task" onClick={this.createTask}> add task</Button>}>
+            trigger={<Button waves='light'>New Task</Button>} actions={<Button className="btn waves-effect waves-light btn-flat modal-action modal-close" waves='light' id="add-task" onClick={this.handleSubmit}>add task</Button>}>
             <div className="row">
-              <form className="col s12">
+              <form onChange={this.createTask} className="col s12">
                 <div className="row">
                   <div className="input-field col s4">
-                    <input placeholder="" id="new-title" type="text" className="validate"/>
+                    <input name="newTitle" placeholder="" id="new-title" type="text" className="validate"/>
                     <label htmlFor="new-title">Title</label>
                   </div>
                   <div className="input-field col s8">
-                    <input placeholder="" id="new-description" type="text" className="validate"/>
+                    <input name="newDescription" placeholder="" id="new-description" type="text" className="validate"/>
                     <label htmlFor="new-description">Description</label>
                   </div>
                 </div>
@@ -64,14 +107,14 @@ render() {
                     <span>Priority: </span>
 
                       <br />
-                      <input name="new-priority" type="radio" id="critical" />
+                      <input value="critical" name="newPriority" type="radio" id="critical" />
                       <label htmlFor="critical">critical</label>
                       <br />
-                      <input name="new-priority" type="radio" id="normal" />
+                      <input value="normal" name="newPriority"  type="radio" id="normal" />
                       <label htmlFor="normal">normal</label>
                       <br />
 
-                      <input name="new-priority" type="radio" id="backburner" />
+                      <input value="backburner" name="newPriority" type="radio" id="backburner" />
                       <label htmlFor="backburner">backburner</label>
 
                     </div>
@@ -82,24 +125,24 @@ render() {
 
 
 
-                          <input name="new-priority" type="radio" id="to do" />
+                          <input value="to do" name="newStatus" type="radio" id="to do" />
                           <label htmlFor="to do">to do</label>
                           <br />
 
-                          <input name="new-priority" type="radio" id="in progress" />
+                          <input value="in progress" name="newStatus" type="radio" id="in progress" />
                           <label htmlFor="in progress">in progress</label>
 
                           <br />
 
-                          <input name="new-priority" type="radio" id="blocked" />
+                          <input value="blocked" name="newStatus" type="radio" id="blocked" />
                           <label htmlFor="blocked">blocked</label>
                           <br />
 
-                          <input name="new-priority" type="radio" id="in review" />
+                          <input value="in review" name="newStatus" type="radio" id="in review" />
                           <label htmlFor="in review">in review</label>
                           <br />
 
-                          <input name="new-priority" type="radio" id="done" />
+                          <input value="done" name="newStatus" type="radio" id="done" />
                           <label htmlFor="done">done</label>
 
                         </div>
@@ -111,15 +154,15 @@ render() {
                         <br />
 
 
-                          <input name="new-type" type="radio" id="feature" />
+                          <input value="feature" name="newType" type="radio" id="feature" />
                           <label htmlFor="feature">feature</label>
                           <br />
 
-                          <input name="new-type" type="radio" id="bug" />
+                          <input value="bug" name="newType" type="radio" id="bug" />
                           <label htmlFor="bug">bug</label>
                           <br />
 
-                          <input name="new-type" type="radio" id="research" />
+                          <input value="research" name="newType" type="radio" id="research" />
                           <label htmlFor="research">research</label>
 
                           <br />
@@ -129,7 +172,7 @@ render() {
 
 
                           <div className="input-field col s2">
-                            <input placeholder="" id="new-estimate" type="number" className="validate"/>
+                            <input placeholder="" name="newEstimate" id="new-estimate" type="number" className="validate"/>
                             <label htmlFor="new-number">time est. (min)</label>
                           </div>
 
