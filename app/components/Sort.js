@@ -20,20 +20,26 @@ class Sort extends React.Component {
       project: {},
       tasks: [],
       activeColumn: "",
-      sortDirection: ""
-
+      sortDirection: "",
+      filter: ""
     };
 
     this.alphaSort = this.alphaSort.bind(this);
     this.timeSort = this.timeSort.bind(this);
     this.dateSort = this.dateSort.bind(this);
-
+    this.searchFilter = this.searchFilter.bind(this);
   }
 
   componentWillReceiveProps(props) {
     this.setState({tasks: props.tasks});
   }
 
+  searchFilter(e) {
+    // get search input
+    this.setState({
+      filter: e.target.value
+    });
+  }
 
   alphaSort(e, name) {
     var toggle = e.target.getAttribute("value");
@@ -103,8 +109,34 @@ class Sort extends React.Component {
 
   }
 
+  renderTasks() {
+    var filter = this.state.filter.toLowerCase();
 
+    // filter results first
+    return this.state.tasks.filter((data) => {
+      if (data.title.toLowerCase().indexOf(filter) > -1 || data.id.toString() === filter)
+        return true;
+      else
+        return false;
+    })
+    // then convert to jsx elements
+    .map((task, i) => {
+      let url = "/task/" + task.id;
 
+      return (
+        <tr key={i}>
+          <td>{task.id}</td>
+          <td><Link to={url}>{task.title}</Link></td>
+          <td>{task.owner}</td>
+          <td>{task.status}</td>
+          <td>{task.timeEstimate}</td>
+          <td>{task.timeSpent}</td>
+          <td>{moment(task.dateCreated).format("YYYY-MM-DD hh:mm A")}</td>
+          <td>{moment(task.dateModified).format("YYYY-MM-DD hh:mm A")}</td>
+        </tr>
+      );
+    });
+  }
 
   render() {
     return (
@@ -114,7 +146,7 @@ class Sort extends React.Component {
             <div className="col s10 offset-s1">
               <div className="input-field">
                 <i className="material-icons prefix">search</i>
-                <input id="search" type="search" className="validate"/>
+                <input id="search" type="search" className="validate" onChange={this.searchFilter} />
                 <label htmlFor="search">Search</label>
               </div>
             </div>
@@ -139,24 +171,7 @@ class Sort extends React.Component {
                 <tbody>
                 {/* this is where each task will populate */}
 
-                {this.state.tasks.map(function(task, i) {
-                  //console.log(this.state.tasks);
-                  let url = "/task/" + task.id;
-                  return (
-
-                          <tr key={i}>
-                            <td>{task.id}</td>
-                            <td><Link to={url}>{task.title}</Link></td>
-                            <td>{task.owner}</td>
-                            <td>{task.status}</td>
-                            <td>{task.timeEstimate}</td>
-                            <td>{task.timeSpent}</td>
-                            <td>{moment(task.dateCreated).format("YYYY-MM-DD hh:mm A")}</td>
-                            <td>{moment(task.dateModified).format("YYYY-MM-DD hh:mm A")}</td>
-                          </tr>
-
-                        )
-                  })}
+                {this.renderTasks()}
 
                 </tbody>
               </table>
