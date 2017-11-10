@@ -29,6 +29,7 @@ class Nav extends React.Component {
 
     this.createTask = this.createTask.bind(this);
     this.chooseProject = this.chooseProject.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -46,8 +47,6 @@ class Nav extends React.Component {
     this.setState({
       [event.target.name]: event.target.value
     });
-
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit() {
