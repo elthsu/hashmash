@@ -12,15 +12,14 @@ import Sort from "../components/Sort";
 import Task from "../components/Task";
 import Test from "../components/Test";
 
-
 // Export the Routes
 module.exports = (
   // High level component is the Router component.
   <Router history={browserHistory}>
-    <Route path="/" component={Main}>
+    <Route path="/" component={Main} >
 
       {/* If user selects Search or Saved show the appropriate component */}
-      <Route path="sort" component={Sort} />
+      <Route path="sort" component={Sort}/>
       <Route path="test" component={Test} />
       <Route path="task/:id" component={Task} />
 

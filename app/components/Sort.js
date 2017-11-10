@@ -14,7 +14,7 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      project: "project1",
+      project: {},
       tasks: [],
       activeColumn: "",
       sortDirection: ""
@@ -27,8 +27,12 @@ class Sort extends React.Component {
 
   }
 
-  componentDidMount() {
-    this.setState({tasks: dummyData})
+  componentWillReceiveProps(props) {
+    this.setState({tasks: props.tasks});
+  }
+
+  componentWillUnmount() {
+
   }
 
 
@@ -135,6 +139,7 @@ class Sort extends React.Component {
                 {/* this is where each task will populate */}
 
                 {this.state.tasks.map(function(task, i) {
+                  //console.log(this.state.tasks);
                   let url = "/task/" + task.id;
                   return (
 

@@ -7,6 +7,9 @@ var socket = io('http://localhost:3000');
 
 import {Modal, Button, Icon} from 'react-materialize';
 
+import {Link} from "react-router";
+
+
 class Nav extends React.Component {
 
   constructor() {
@@ -49,6 +52,8 @@ class Nav extends React.Component {
     });
   }
 
+
+
   handleSubmit() {
     this.props._newTask(
       {
@@ -73,6 +78,7 @@ class Nav extends React.Component {
     this.props._selectCollaborator(collaborator);
   }
 
+
   render() {
     return (
       <div>
@@ -89,7 +95,7 @@ class Nav extends React.Component {
                   {this.state.allProjects.map((project, i) => {
                     return (
                       <li key={i}>
-                        <a value={project.name} onClick={(event) => this.chooseProject(event)} href="#!">{project.name}</a>
+                    <Link to="/sort" value={project.name} onClick={(event)=>this.chooseProject(event)} href="#!">{project.name}</Link>
                       </li>
                     )
                   })
@@ -108,6 +114,7 @@ class Nav extends React.Component {
                           <input name="newTitle" placeholder="" id="new-title" type="text" className="validate"/>
                           <label htmlFor="new-title">Title</label>
                         </div>
+
 
                         <div className="input-field col s2">
                           <input placeholder="" name="newEstimate" id="new-estimate" type="number" className="validate"/>
