@@ -5,6 +5,9 @@ var React = require("react");
 var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
+// Moment.js
+var moment = require('moment');
+
 import {Link} from 'react-router';
 import dummyData from '../../dummyData';
 
@@ -29,10 +32,6 @@ class Sort extends React.Component {
 
   componentWillReceiveProps(props) {
     this.setState({tasks: props.tasks});
-  }
-
-  componentWillUnmount() {
-
   }
 
 
@@ -111,14 +110,16 @@ class Sort extends React.Component {
     return (
       <div>
         <div className="container">
-          <div className="row">
-            <div className="col s12">
-              <div className="input-field col s12">
+          <div id="searchBar" className="row z-depth-5">
+            <div className="col s10 offset-s1">
+              <div className="input-field">
                 <i className="material-icons prefix">search</i>
                 <input id="search" type="search" className="validate"/>
                 <label htmlFor="search">Search</label>
               </div>
             </div>
+          </div>
+          <div id="mainPageWrap" className="row z-depth-5">
             <div className="col s1"></div>
             <div className="col s10">
               <table className="highlight">
@@ -150,8 +151,8 @@ class Sort extends React.Component {
                             <td>{task.status}</td>
                             <td>{task.timeEstimate}</td>
                             <td>{task.timeSpent}</td>
-                            <td>{task.dateCreated}</td>
-                            <td>{task.dateModified}</td>
+                            <td>{moment(task.dateCreated).format("YYYY-MM-DD hh:mm A")}</td>
+                            <td>{moment(task.dateModified).format("YYYY-MM-DD hh:mm A")}</td>
                           </tr>
 
                         )

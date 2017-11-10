@@ -203,6 +203,7 @@
 
   #mainPageWrap {
     padding: 30px 0;
+    min-height: 400px;
   }
 
   th:hover {
@@ -333,4 +334,9 @@
   .modal h4 {
     text-align: center;
 
+  }
+
+  #projectDrop {
+
+    width: 290px !important;
   }
