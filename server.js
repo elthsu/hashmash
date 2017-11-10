@@ -10,7 +10,7 @@ var db = require("./schema.js");
 // initialize web socket & server
 var app = express();
 var PORT = 3000;
-var server = require('http').createServer(app);  
+var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 io.on("connection", function(socket) {
@@ -56,7 +56,7 @@ io.on("connection", function(socket) {
 		console.log(`client connected to project "${data}"`);
 
 		// leave original room, if in one
-		if (socket.room) 
+		if (socket.room)
 			socket.leave(socket.room);
 
 		socket.room = data;
@@ -82,6 +82,7 @@ io.on("connection", function(socket) {
 
 	// client tried to make a new task object
 	socket.on("new", function(data) {
+		console.log(data)
 		// need to be in a room first, buddy
 		if (!socket.room) return;
 
@@ -138,7 +139,7 @@ io.on("connection", function(socket) {
 
 		db.projects.findAndModify({
 			query: {
-				name: socket.room, 
+				name: socket.room,
 				tasks: {$elemMatch: {id: data.id}}
 			},
 			update: {$set: obj},
@@ -186,7 +187,7 @@ io.on("connection", function(socket) {
 		// add comment to nested task object
 		db.projects.findAndModify({
 			query: {
-				name: socket.room, 
+				name: socket.room,
 				"tasks.id": data.id
 			},
 			update: {
