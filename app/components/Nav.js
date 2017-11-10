@@ -6,8 +6,7 @@ var io = require("socket.io-client");
 var socket = io('http://localhost:3000');
 
 import {Modal, Button, Icon} from 'react-materialize';
-import {Link} from 'react-router';
-import dummyData from '../../dummyData';
+
 
 class Nav extends React.Component {
 
@@ -15,7 +14,7 @@ class Nav extends React.Component {
     super();
 
     this.state = {
-    project: {name:"#mash"},
+    project: {},
     tasks: []
   };
 
@@ -38,7 +37,7 @@ render() {
         <ul className="right hide-on-med-and-down">
           <li>
 
-            <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='projectDrop'>{this.state.project.name}</a>
+            <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='projectDrop'>Projects</a>
             <ul id='projectDrop' className='dropdown-content collapsible' data-collapsible="accordion">
               <li>
                 <a href="#!">{this.state.project.name}</a>
