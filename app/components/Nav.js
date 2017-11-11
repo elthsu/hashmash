@@ -122,7 +122,7 @@ class Nav extends React.Component {
                 } > add task < /Button>}>
 
                   <div className="row">
-                    <form id="modalForm" onSubmit={this.createTask} className="col s12">
+                    <form id="modalForm" onChange={this.createTask} className="col s12">
                       <div className="row">
                         <div className="input-field col s6">
                           <input name="newTitle" placeholder="" id="new-title" type="text" className="validate"/>
@@ -145,6 +145,7 @@ class Nav extends React.Component {
 
                           {/* <!-- Dropdown Structure --> */}
                           <ul name="newDeveloper" id='new-developer' className='dropdown-content'>
+
                             {this.state.collaborators.map((collaborators, i) => {
                               return (
                                 <li key={i}>
@@ -206,14 +207,7 @@ class Nav extends React.Component {
                           <input value="blocked" name="newStatus" type="radio" id="blocked"/>
 
                           <label htmlFor="blocked">Blocked</label>
-                          <br/>
 
-                          <input value="in review" name="newStatus" type="radio" id="in review"/>
-                          <label htmlFor="in review">In Review</label>
-                          <br/>
-
-                          <input value="done" name="newStatus" type="radio" id="done"/>
-                          <label htmlFor="done">Done</label>
                         </div>
                         <div className="col s4" id="newTaskRadio3">
                           <span>Type:

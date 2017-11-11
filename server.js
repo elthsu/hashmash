@@ -113,7 +113,7 @@ io.on("connection", function(socket) {
 							owner: data.owner || null,
 							description: data.description || "",
 							priority: data.priority || "normal",
-							status: "open",
+							status: data.status || "open",
 							type: data.type || "feature",
 							dateCreated: new Date(),
 							dateModified: new Date(),
