@@ -125,7 +125,7 @@ io.on("connection", function(socket) {
 				},
 				new: true
 			}, function(err, docs) {
-				// send new task list to every other client in same room
+				// send new list to every other client in same room
 				io.to(socket.room).emit("tasks", docs.tasks);
 			});
 		});
@@ -157,15 +157,7 @@ io.on("connection", function(socket) {
 			// if task no longer exists, cancel out
 			if (!docs) return;
 
-			// find the actual task that was updated, 'cause mongo too dumb to do it for me
-			var task = docs.tasks.find((t) => {
-				return t.id === data.id;
-			});
-
-			// send new task to every other client in same room
-			io.to(socket.room).emit("task #" + data.id, task);
-
-			// also send entire list to separate channel
+			// send new list to every other client in same room
 			io.to(socket.room).emit("tasks", docs.tasks);
 		});
 	});
@@ -180,10 +172,8 @@ io.on("connection", function(socket) {
 			update: {$pull: {tasks: {id: data.id}}},
 			new: true
 		}, function(err, docs) {
+			// send new list to every other client in same room
 			io.to(socket.room).emit("tasks", docs.tasks);
-
-			// broadcast delete flag
-			io.to(socket.room).emit("task #" + data.id, null);
 		});
 	});
 
@@ -208,13 +198,8 @@ io.on("connection", function(socket) {
 			},
 			new: true
 		}, function(err, docs) {
-			// find the actual task that was updated, 'cause mongo too dumb to do it for me
-			var task = docs.tasks.find((t) => {
-				return t.id === data.id;
-			});
-
-			// send new task to every other client in same room
-			io.to(socket.room).emit("task #" + data.id, task);
+			// send new list to every other client in same room
+			io.to(socket.room).emit("tasks", docs.tasks);
 		});
 	});
 

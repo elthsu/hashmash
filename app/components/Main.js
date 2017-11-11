@@ -17,14 +17,14 @@ class Main extends React.Component {
       project: {},
       tasks: [],
       allProjects: [],
-      currentTask: {}
+      currentTask: {comments:[]}
     };
-    this._selectProject = this._selectProject.bind(this);
 
+    this._selectProject = this._selectProject.bind(this);
+    this.updateCurrentTask = this.updateCurrentTask.bind(this);
   }
 
   componentDidMount() {
-
 		// when user connects to server, request initial data
 		socket.on("connect", function(data) {
 			socket.emit("login", "...");
@@ -45,20 +45,29 @@ class Main extends React.Component {
 		// client receives whole tasks array
 		// triggered when user "joins" a project or tasks have been updated
 		socket.on("tasks", (data) => {
-			console.log("all tasks", data);
       this.setState({tasks: data})
-
-		});
-
-		// client receives update related to a single task
-		// triggered when individual task properties were updated
-		socket.on("task #1", (data) => {
-			// if data is null, we know it was deleted
-			console.log("task #1", data);
+      this.updateCurrentTask(this.props);
 		});
 	}
 
+  componentWillReceiveProps(props) {
+    this.updateCurrentTask(props);
+  }
 
+  updateCurrentTask(props) {
+    if (props.params.id) {
+      var id = props.params.id;
+      var tasks = this.state.tasks;
+
+      // find matching task in list
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id.toString() === id) {
+          this.setState({currentTask: tasks[i]});
+          break;
+        }
+      }
+    }
+  }
 
   _selectProject(event) {
     if (event) {
@@ -72,8 +81,8 @@ class Main extends React.Component {
     // won't work until user has entered a "room" (i.e. selected a project)
     // id of task is required
     socket.emit("update", {
-      id: 1,
-      title: "New Name",
+      id: 2,
+      title: "Task 2 updated",
       description: "New description"
     });
   }
@@ -94,18 +103,6 @@ class Main extends React.Component {
       user: "elton bo belton",
       message: txt
     });
-  }
-
-
-
-  componentWillReceiveProps(props) {
-    console.log(this.state.project)
-    if (props.params.id) {
-      var id = props.params.id - 1;
-      this.setState({currentTask: this.state.tasks[id]});
-
-
-    }
   }
 
   render() {
