@@ -27,7 +27,8 @@ class Nav extends React.Component {
       newStatus: "",
       newType: "",
       newEstimate: "",
-      newDeveloper: ""
+      newDeveloper: "",
+      developerBtn: "Developer"
     };
 
     this.createTask = this.createTask.bind(this);
@@ -55,6 +56,7 @@ class Nav extends React.Component {
 
 
   handleSubmit() {
+    console.log(this.state);
     this.props._newTask(
       {
         title: this.state.newTitle,
@@ -66,6 +68,10 @@ class Nav extends React.Component {
         timeEstimate: this.state.newEstimate
       }
     );
+    document.getElementById("modalForm").reset();
+    this.setState({
+      developerBtn: "Developer"
+    })
   }
 
   chooseProject(event) {
@@ -73,9 +79,11 @@ class Nav extends React.Component {
     this.props._selectProject(project);
   }
 
-  chooseCollaborator(event) {
-    var collaborator = event.target.getAttribute("value");
-    this.props._selectCollaborator(collaborator);
+  chooseDeveloper(event) {
+    var developer = event.target.getAttribute("value");
+    this.setState({
+      developerBtn: developer
+    })
   }
 
 
@@ -108,7 +116,7 @@ class Nav extends React.Component {
                 } > add task < /Button>}>
 
                   <div className="row">
-                    <form onChange={this.createTask} className="col s12">
+                    <form id="modalForm" onChange={this.createTask} className="col s12">
                       <div className="row">
                         <div className="input-field col s6">
                           <input name="newTitle" placeholder="" id="new-title" type="text" className="validate"/>
@@ -125,9 +133,9 @@ class Nav extends React.Component {
                           {/* <input name="newDeveloper" placeholder="" id="new-developer" type="text" className="validate"/>
                           <label htmlFor="new-developer">Developer</label> */}
 
-
+                          <span>Developer: </span>
                           {/* <!-- Dropdown Trigger --> */}
-                          <a id="devBtn" className='dropdown-button btn' href='#' data-activates='new-developer'>Developer</a>
+                          <a id="devBtn" className='dropdown-button btn' href='#' data-activates='new-developer'>{this.state.developerBtn}</a>
 
                           {/* <!-- Dropdown Structure --> */}
                           <ul name="newDeveloper" id='new-developer' className='dropdown-content'>
@@ -139,6 +147,10 @@ class Nav extends React.Component {
                               )
                             })
                             } */}
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="clark" name="newDeveloper">Clark</a></li>
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="paige" name="newDeveloper">Paige</a></li>
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="elton" name="newDeveloper">Elton</a></li>
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="potato" name="newDeveloper">Potato</a></li>
                           </ul>
 
 
