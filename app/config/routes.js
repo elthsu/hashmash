@@ -23,6 +23,8 @@ module.exports = (
       <Route path="test" component={Test} />
       <Route path="task/:id" component={Task} />
 
+      <Route path="project/:name/task/:id" component={Task} />
+      <Route path="project/:name" component={Sort} />
 
       {/* If user selects any other path... we get the Home Route */}
       <IndexRoute component={Sort} />

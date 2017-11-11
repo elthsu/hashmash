@@ -269,6 +269,11 @@ app.get("/logout", function(req, res) {
 // public assets
 app.use(express.static("app/public"));
 
+// all other URLs should go to main page
+app.get("*", function(req, res) {
+	res.sendFile(path.join(__dirname, "./app/public/index.html"));
+});
+
 // start localhost
 server.listen(PORT, function() {
 	console.log("App running on port 3000!");

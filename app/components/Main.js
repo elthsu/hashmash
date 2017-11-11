@@ -2,8 +2,7 @@
 var React = require("react");
 
 // socket connection
-var io = require("socket.io-client");
-var socket = io('http://localhost:3000');
+import {socket} from "../config/socket.js";
 
 // components
 var Nav = require("./Nav");
@@ -18,12 +17,11 @@ class Main extends React.Component {
       project: {},
       tasks: [],
       collaborators: [],
-      newTask: {},
       allProjects: [],
       currentTask: {}
     };
+    this._selectProject = this._selectProject.bind(this);
 
-    this._selectTask = this._selectTask.bind(this);
   }
 
   componentDidMount() {
@@ -74,13 +72,8 @@ class Main extends React.Component {
     if (event) {
       // sets user up to start getting updates on this project
       socket.emit("join", event);
+      this.setState({project: event});
     }
-  }
-
-  _newTask(task) {
-    // won't work until user has joined a "room" (i.e. selected a project)
-    socket.emit("new", task);
-
   }
 
   _updateTask() {
@@ -111,18 +104,27 @@ class Main extends React.Component {
     });
   }
 
-  _selectTask(taskId) {
-    this.setState({currentTask: taskId});
+
+
+  componentWillReceiveProps(props) {
+    console.log(this.state.project)
+    if (props.params.id) {
+      var id = props.params.id - 1;
+      this.setState({currentTask: this.state.tasks[id]});
+
+
+    }
   }
 
   render() {
+    console.log("props.id", this.state.currentTask);
     return (
       <div>
-      <Nav _newTask = {this._newTask} _selectProject={this._selectProject}
+      <Nav _selectProject={this._selectProject}
       allProjects = {this.state.allProjects} collaborators = {this.state.collaborators}/>
 
       {this.props.children && React.cloneElement(this.props.children, {
-      tasks: this.state.tasks, _selectTask: this._selectTask
+      tasks: this.state.tasks, _selectTask: this._selectTask, currentTask: this.state.currentTask
 })}
     </div>
     );

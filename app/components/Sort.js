@@ -2,8 +2,7 @@
 var React = require("react");
 
 // socket connection
-var io = require("socket.io-client");
-var socket = io('http://localhost:3000');
+import {socket} from "../config/socket.js";
 
 // Moment.js
 var moment = require('moment');
@@ -17,94 +16,103 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      project: {},
-      tasks: [],
       activeColumn: "",
-      sortDirection: ""
-
+      sortReverse: false,
+      filter: ""
     };
 
-    this.alphaSort = this.alphaSort.bind(this);
-    this.timeSort = this.timeSort.bind(this);
-    this.dateSort = this.dateSort.bind(this);
-
+    this.setSort = this.setSort.bind(this);
+    this.searchFilter = this.searchFilter.bind(this);
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({tasks: props.tasks});
+  searchFilter(e) {
+    // get search input
+    this.setState({
+      filter: e.target.value
+    });
   }
 
-
-  alphaSort(e, name) {
-    var toggle = e.target.getAttribute("value");
-    var id = e.target.getAttribute("id");
-    if (toggle === "a") {
-      var unSorted = this.state.tasks;
-      var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
-      e.target.setAttribute("value", "b");
-      this.setState({activeColumn: id});
-      this.setState({sortDirection: "b"});
-      this.setState({tasks: sorted});
-    } else {
-      var unSorted = this.state.tasks;
-      var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
-      e.target.setAttribute("value", "a");
-      this.setState({activeColumn: id});
-      this.setState({sortDirection: "a"});
-      this.setState({tasks: sorted});
-    }
-
+  setSort(e, name) {
+    // toggle sort
+    this.setState({
+      activeColumn: name,
+      sortReverse: name === this.state.activeColumn ? !this.state.sortReverse : false
+    });
   }
 
-  timeSort(e, time) {
-    var unSorted = this.state.tasks;
-    var toggle = e.target.getAttribute("value");
-    if (toggle === "a") {
-      var sorted = unSorted.sort(function(a, b) {
-        a = parseInt(a[time]);
-        b = parseInt(b[time]);
-        return a - b;
-      });
-      e.target.setAttribute("value", "b");
-      this.setState({tasks: sorted})
-    } else {
-      var sorted = unSorted.sort(function(a, b) {
-        a = parseInt(a[time]);
-        b = parseInt(b[time]);
-        return b - a;
-      });
-      e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted});
-    }
+  renderTasks() {
+    var filter = this.state.filter.toLowerCase();
+    var field = this.state.activeColumn;
+    var reverse = this.state.sortReverse;
 
+    // filter results first
+    return this.props.tasks.filter((data) => {
+      if (data.title.toLowerCase().indexOf(filter) > -1 || data.id.toString() === filter)
+        return true;
+      else
+        return false;
+    })
+    // then sort based on selected field
+    .sort((a, b) => {
+      switch (field) {
+        // by number
+        case "timeEstimate":
+        case "timeSpent":
+        case "id":
+          a = parseInt(a[field]);
+          b = parseInt(b[field]);
+
+          return (reverse ? b > a : a > b);
+
+          break;
+        // by letter
+        case "title":
+        case "owner":
+        case "status":
+          a = a[field].toLowerCase();
+          b = b[field].toLowerCase();
+
+          if (reverse) {
+            if (b < a) return -1;
+            else if (b > a) return 1;
+            else return 0;
+          }
+          else {
+            if (a < b) return -1;
+            else if (a > b) return 1;
+            else return 0;
+         }
+
+          break;
+        // by date
+        case "dateCreated":
+        case "dateModified":
+          a = new Date(a[field]);
+          b = new Date(b[field]);
+
+          return (reverse ? b - a : a - b);
+
+          break;
+      }
+    })
+    // then convert to jsx elements
+    .map((task, i) => {
+      let url = "/task/" + task.id;
+
+      return (
+        <tr key={i}>
+          <td>{task.id}</td>
+          <td><Link to={url}>{task.title}</Link></td>
+          <td>{task.owner}</td>
+          <td>{task.status}</td>
+          <td>{task.timeEstimate}</td>
+          <td>{task.timeSpent}</td>
+          <td>{moment(task.dateCreated).format("YYYY-MM-DD hh:mm A")}</td>
+          <td>{moment(task.dateModified).format("YYYY-MM-DD hh:mm A")}</td>
+        </tr>
+      );
+    });
   }
-
-  dateSort(e, date) {
-    var unSorted = this.state.tasks;
-    var toggle = e.target.getAttribute("value");
-    if (toggle === "a") {
-      var sorted = unSorted.sort(function(a, b) {
-      a = new Date(a[date]);
-      b = new Date(b[date]);
-      return a>b ? 1 : a<b ? -1 : 0;
-      });
-      e.target.setAttribute("value", "b");
-      this.setState({tasks: sorted})
-    } else {
-      var sorted = unSorted.sort(function(a, b) {
-      a = new Date(a[date]);
-      b = new Date(b[date]);
-      return a>b ? -1 : a<b ? 1 : 0;
-      });
-      e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted});
-    }
-
-
-  }
-
-
-
 
   render() {
     return (
@@ -115,7 +123,7 @@ class Sort extends React.Component {
               {console.log(this.props)}
               <div className="input-field">
                 <i className="material-icons prefix">search</i>
-                <input id="search" type="search" className="validate"/>
+                <input id="search" type="search" className="validate" onChange={this.searchFilter} />
                 <label htmlFor="search">Search</label>
               </div>
             </div>
@@ -126,38 +134,21 @@ class Sort extends React.Component {
               <table className="highlight">
                 <thead>
                   <tr>
-                      <th value="b" id="id" onClick={(e)=>this.timeSort(e, "id")}>ID</th>
-                      <th value="a" id="title" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
-                      <th value="a" id="owner" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
-                      <th value="a" id="status" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
-                      <th value="a" id="timeEstimate" onClick={(e)=>this.timeSort(e, "timeEstimate")}>Time Allotment</th>
-                      <th value="a" id="timeSpent" onClick={(e)=>this.timeSort(e, "timeSpent")}>Time Spent</th>
-                      <th value="a" id="dateCreated" onClick={(e)=>this.dateSort(e, "dateCreated")}>Date Created</th>
-                      <th value="a" id="dateModified" onClick={(e)=>this.dateSort(e, "dateModified")}>Last Update</th>
+                      <th value="b" id="id" onClick={(e)=>this.setSort(e, "id")}>ID</th>
+                      <th value="a" id="title" onClick={(e)=>this.setSort(e, "title")}>Title</th>
+                      <th value="a" id="owner" onClick={(e)=>this.setSort(e, "owner")}>Developer</th>
+                      <th value="a" id="status" onClick={(e)=>this.setSort(e, "status")}>Status</th>
+                      <th value="a" id="timeEstimate" onClick={(e)=>this.setSort(e, "timeEstimate")}>Time Allotment</th>
+                      <th value="a" id="timeSpent" onClick={(e)=>this.setSort(e, "timeSpent")}>Time Spent</th>
+                      <th value="a" id="dateCreated" onClick={(e)=>this.setSort(e, "dateCreated")}>Date Created</th>
+                      <th value="a" id="dateModified" onClick={(e)=>this.setSort(e, "dateModified")}>Last Update</th>
                   </tr>
                 </thead>
 
                 <tbody>
                 {/* this is where each task will populate */}
 
-                {this.state.tasks.map(function(task, i) {
-                  //console.log(this.state.tasks);
-                  let url = "/task/" + task.id;
-                  return (
-
-                          <tr key={i}>
-                            <td>{task.id}</td>
-                            <td><Link to={url}>{task.title}</Link></td>
-                            <td>{task.owner}</td>
-                            <td>{task.status}</td>
-                            <td>{task.timeEstimate}</td>
-                            <td>{task.timeSpent}</td>
-                            <td>{moment(task.dateCreated).format("YYYY-MM-DD hh:mm A")}</td>
-                            <td>{moment(task.dateModified).format("YYYY-MM-DD hh:mm A")}</td>
-                          </tr>
-
-                        )
-                  })}
+                {this.renderTasks()}
 
                 </tbody>
               </table>
