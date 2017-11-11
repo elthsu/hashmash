@@ -6,6 +6,7 @@ import {socket} from "../config/socket.js";
 
 import {Modal, Button, Icon} from 'react-materialize';
 
+var Chat = require("./Chat");
 
 class Task extends React.Component {
   constructor(props) {
@@ -120,16 +121,9 @@ class Task extends React.Component {
               </div>
             </div>
             <div className="col l1"></div>
-            <div id="chatWin" className="col l3 z-depth-5">
-              {this.props.currentTask.comments.map(function(chat, i) {
-                return (
-                  <p key={i} className="chatMessage">{chat}</p>
-                )
-              })}
-            </div>
+            <Chat comments={this.props.currentTask.comments} />
           </div>
         </div>
-
     );
   }
 }
