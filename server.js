@@ -81,9 +81,9 @@ io.on("connection", function(socket) {
 		});
 
 		// also get list of contributors for drop-down
-		axios.get(`https://api.github.com/repos/${socket.room}/contributors?${cookie}`).then(function(data) {
+		axios.get(`https://api.github.com/repos/${socket.room}/collaborators?${cookie}`).then(function(data) {
 			// send user list back to FE
-			socket.emit("contributors", data.data);
+			socket.emit("collaborators", data.data);
 		}).catch(function(error) {
 			console.log("failed to get collaborators");
 		});
