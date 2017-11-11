@@ -17,22 +17,14 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      // project: {},
-      // tasks: [],
       activeColumn: "",
       sortReverse: false,
       filter: ""
     };
 
     this.setSort = this.setSort.bind(this);
-    this.timeSort = this.timeSort.bind(this);
-    this.dateSort = this.dateSort.bind(this);
     this.searchFilter = this.searchFilter.bind(this);
   }
-
-  // componentWillReceiveProps(props) {
-  //   this.setState({tasks: props.tasks});
-  // }
 
   searchFilter(e) {
     // get search input
@@ -42,82 +34,17 @@ class Sort extends React.Component {
   }
 
   setSort(e, name) {
-    var toggle = e.target.getAttribute("value");
-    var id = e.target.getAttribute("id");
-
+    // toggle sort
     this.setState({
       activeColumn: name,
-      sortReverse: name === this.state.activeColumn ? !this.state.activeColumn : false
+      sortReverse: name === this.state.activeColumn ? !this.state.sortReverse : false
     });
-
-    //
-    // if (toggle === this.state.activeColumn) {
-    //   var unSorted = this.state.tasks;
-    //   var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
-    //   e.target.setAttribute("value", "b");
-    //   this.setState({activeColumn: id});
-    //   this.setState({sortDirection: "b"});
-    //   this.setState({tasks: sorted});
-    // } else {
-    //   var unSorted = this.state.tasks;
-    //   var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
-    //   e.target.setAttribute("value", "a");
-    //   this.setState({activeColumn: id});
-    //   this.setState({sortDirection: "a"});
-    //   this.setState({tasks: sorted});
-    // }
-
-  }
-
-  timeSort(e, time) {
-    var unSorted = this.state.tasks;
-    var toggle = e.target.getAttribute("value");
-    if (toggle === "a") {
-      var sorted = unSorted.sort(function(a, b) {
-        a = parseInt(a[time]);
-        b = parseInt(b[time]);
-        return a - b;
-      });
-      e.target.setAttribute("value", "b");
-      this.setState({tasks: sorted})
-    } else {
-      var sorted = unSorted.sort(function(a, b) {
-        a = parseInt(a[time]);
-        b = parseInt(b[time]);
-        return b - a;
-      });
-      e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted});
-    }
-
-  }
-
-  dateSort(e, date) {
-    var unSorted = this.state.tasks;
-    var toggle = e.target.getAttribute("value");
-    if (toggle === "a") {
-      var sorted = unSorted.sort(function(a, b) {
-      a = new Date(a[date]);
-      b = new Date(b[date]);
-      return a>b ? 1 : a<b ? -1 : 0;
-      });
-      e.target.setAttribute("value", "b");
-      this.setState({tasks: sorted})
-    } else {
-      var sorted = unSorted.sort(function(a, b) {
-      a = new Date(a[date]);
-      b = new Date(b[date]);
-      return a>b ? -1 : a<b ? 1 : 0;
-      });
-      e.target.setAttribute("value", "a");
-      this.setState({tasks: sorted});
-    }
-
-
   }
 
   renderTasks() {
     var filter = this.state.filter.toLowerCase();
+    var field = this.state.activeColumn;
+    var reverse = this.state.sortReverse;
 
     // filter results first
     return this.props.tasks.filter((data) => {
@@ -126,17 +53,45 @@ class Sort extends React.Component {
       else
         return false;
     })
+    // then sort based on selected field
     .sort((a, b) => {
-      console.log(this.state.activeColumn);
-      switch (this.state.activeColumn) {
-
+      switch (field) {
+        // by number
         case "timeEstimate":
         case "timeSpent":
         case "id":
-          a = parseInt(a[this.state.activeColumn]);
-          b = parseInt(b[this.state.activeColumn]);
-          console.log("case")
-          return (this.state.sortReverse ? b - a : a - b);
+          a = parseInt(a[field]);
+          b = parseInt(b[field]);
+
+          return (reverse ? b > a : a > b);
+
+          break;
+        // by letter
+        case "title":
+        case "owner":
+        case "status":
+          a = a[field].toLowerCase();
+          b = b[field].toLowerCase();
+
+          if (reverse) {
+            if (b < a) return -1;
+            else if (b > a) return 1;
+            else return 0;
+          }
+          else {
+            if (a < b) return -1;
+            else if (a > b) return 1;
+            else return 0;
+         }
+
+          break;
+        // by date
+        case "dateCreated":
+        case "dateModified":
+          a = new Date(a[field]);
+          b = new Date(b[field]);
+
+          return (reverse ? b - a : a - b);
 
           break;
       }
