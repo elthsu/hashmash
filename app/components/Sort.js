@@ -17,22 +17,22 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      project: {},
-      tasks: [],
+      // project: {},
+      // tasks: [],
       activeColumn: "",
-      sortDirection: "",
+      sortReverse: false,
       filter: ""
     };
 
-    this.alphaSort = this.alphaSort.bind(this);
+    this.setSort = this.setSort.bind(this);
     this.timeSort = this.timeSort.bind(this);
     this.dateSort = this.dateSort.bind(this);
     this.searchFilter = this.searchFilter.bind(this);
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({tasks: props.tasks});
-  }
+  // componentWillReceiveProps(props) {
+  //   this.setState({tasks: props.tasks});
+  // }
 
   searchFilter(e) {
     // get search input
@@ -41,24 +41,31 @@ class Sort extends React.Component {
     });
   }
 
-  alphaSort(e, name) {
+  setSort(e, name) {
     var toggle = e.target.getAttribute("value");
     var id = e.target.getAttribute("id");
-    if (toggle === "a") {
-      var unSorted = this.state.tasks;
-      var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
-      e.target.setAttribute("value", "b");
-      this.setState({activeColumn: id});
-      this.setState({sortDirection: "b"});
-      this.setState({tasks: sorted});
-    } else {
-      var unSorted = this.state.tasks;
-      var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
-      e.target.setAttribute("value", "a");
-      this.setState({activeColumn: id});
-      this.setState({sortDirection: "a"});
-      this.setState({tasks: sorted});
-    }
+
+    this.setState({
+      activeColumn: name,
+      sortReverse: name === this.state.activeColumn ? !this.state.activeColumn : false
+    });
+
+    //
+    // if (toggle === this.state.activeColumn) {
+    //   var unSorted = this.state.tasks;
+    //   var sorted = unSorted.sort((a, b) => a[name].localeCompare(b[name]));
+    //   e.target.setAttribute("value", "b");
+    //   this.setState({activeColumn: id});
+    //   this.setState({sortDirection: "b"});
+    //   this.setState({tasks: sorted});
+    // } else {
+    //   var unSorted = this.state.tasks;
+    //   var sorted = unSorted.sort((a, b) => b[name].localeCompare(a[name]));
+    //   e.target.setAttribute("value", "a");
+    //   this.setState({activeColumn: id});
+    //   this.setState({sortDirection: "a"});
+    //   this.setState({tasks: sorted});
+    // }
 
   }
 
@@ -113,11 +120,26 @@ class Sort extends React.Component {
     var filter = this.state.filter.toLowerCase();
 
     // filter results first
-    return this.state.tasks.filter((data) => {
+    return this.props.tasks.filter((data) => {
       if (data.title.toLowerCase().indexOf(filter) > -1 || data.id.toString() === filter)
         return true;
       else
         return false;
+    })
+    .sort((a, b) => {
+      console.log(this.state.activeColumn);
+      switch (this.state.activeColumn) {
+
+        case "timeEstimate":
+        case "timeSpent":
+        case "id":
+          a = parseInt(a[this.state.activeColumn]);
+          b = parseInt(b[this.state.activeColumn]);
+          console.log("case")
+          return (this.state.sortReverse ? b - a : a - b);
+
+          break;
+      }
     })
     // then convert to jsx elements
     .map((task, i) => {
@@ -157,14 +179,14 @@ class Sort extends React.Component {
               <table className="highlight">
                 <thead>
                   <tr>
-                      <th value="b" id="id" onClick={(e)=>this.timeSort(e, "id")}>ID</th>
-                      <th value="a" id="title" onClick={(e)=>this.alphaSort(e, "title")}>Title</th>
-                      <th value="a" id="owner" onClick={(e)=>this.alphaSort(e, "owner")}>Developer</th>
-                      <th value="a" id="status" onClick={(e)=>this.alphaSort(e, "status")}>Status</th>
-                      <th value="a" id="timeEstimate" onClick={(e)=>this.timeSort(e, "timeEstimate")}>Time Allotment</th>
-                      <th value="a" id="timeSpent" onClick={(e)=>this.timeSort(e, "timeSpent")}>Time Spent</th>
-                      <th value="a" id="dateCreated" onClick={(e)=>this.dateSort(e, "dateCreated")}>Date Created</th>
-                      <th value="a" id="dateModified" onClick={(e)=>this.dateSort(e, "dateModified")}>Last Update</th>
+                      <th value="b" id="id" onClick={(e)=>this.setSort(e, "id")}>ID</th>
+                      <th value="a" id="title" onClick={(e)=>this.setSort(e, "title")}>Title</th>
+                      <th value="a" id="owner" onClick={(e)=>this.setSort(e, "owner")}>Developer</th>
+                      <th value="a" id="status" onClick={(e)=>this.setSort(e, "status")}>Status</th>
+                      <th value="a" id="timeEstimate" onClick={(e)=>this.setSort(e, "timeEstimate")}>Time Allotment</th>
+                      <th value="a" id="timeSpent" onClick={(e)=>this.setSort(e, "timeSpent")}>Time Spent</th>
+                      <th value="a" id="dateCreated" onClick={(e)=>this.setSort(e, "dateCreated")}>Date Created</th>
+                      <th value="a" id="dateModified" onClick={(e)=>this.setSort(e, "dateModified")}>Last Update</th>
                   </tr>
                 </thead>
 
