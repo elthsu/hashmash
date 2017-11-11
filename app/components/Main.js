@@ -16,6 +16,7 @@ class Main extends React.Component {
     this.state = {
       project: {},
       tasks: [],
+      collaborators: [],
       allProjects: [],
       currentTask: {}
     };
@@ -49,6 +50,13 @@ class Main extends React.Component {
       this.setState({tasks: data})
 
 		});
+
+    //listen for contributors to populate for each project
+    socket.on("collaborators", (data) => {
+      console.log("all collaborators", data);
+      this.setState({collaborators: data})
+
+    });
 
 		// client receives update related to a single task
 		// triggered when individual task properties were updated
@@ -113,7 +121,7 @@ class Main extends React.Component {
     return (
       <div>
       <Nav _selectProject={this._selectProject}
-      allProjects = {this.state.allProjects}/>
+      allProjects = {this.state.allProjects} collaborators = {this.state.collaborators}/>
 
       {this.props.children && React.cloneElement(this.props.children, {
       tasks: this.state.tasks, _selectTask: this._selectTask, currentTask: this.state.currentTask

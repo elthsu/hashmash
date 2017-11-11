@@ -17,7 +17,7 @@ class Nav extends React.Component {
     this.state = {
       project: {},
       allProjects: [],
-      allCollaborators: [],
+      collaborators: [],
       tasks: [],
       newTask: {},
       newTitle: "",
@@ -26,26 +26,25 @@ class Nav extends React.Component {
       newStatus: "",
       newType: "",
       newEstimate: "",
-      newDeveloper: ""
+      newDeveloper: "",
+      developerBtn: "Developer"
     };
 
     this.createTask = this.createTask.bind(this);
     this.chooseProject = this.chooseProject.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.resetModal = this.resetModal.bind(this);
   }
 
   componentWillReceiveProps(props) {
     this.setState({allProjects: props.allProjects});
-    this.setState({allCollaborators: props.allCollaborators});
+    this.setState({collaborators: props.collaborators});
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.state.allProjects);
-    console.log(this.state.allCollaborators);
   }
 
   createTask(event) {
-
     this.setState({
       [event.target.name]: event.target.value
     });
@@ -58,13 +57,24 @@ class Nav extends React.Component {
       {
         title: this.state.newTitle,
         description: this.state.newDescription,
-        owner: this.state.newDeveloper,
+        owner: this.state.developerBtn,
         priority: this.state.newPriority,
         status: this.state.newStatus,
         type: this.state.newType,
         timeEstimate: this.state.newEstimate
       }
     );
+    document.getElementById("modalForm").reset();
+    this.setState({
+      developerBtn: "Developer"
+    });
+  }
+
+  resetModal() {
+    document.getElementById("modalForm").reset();
+    this.setState({
+      developerBtn: "Developer"
+    });
   }
 
   chooseProject(event) {
@@ -72,10 +82,15 @@ class Nav extends React.Component {
     this.props._selectProject(project);
   }
 
-  chooseCollaborator(event) {
-    var collaborator = event.target.getAttribute("value");
-    this.props._selectCollaborator(collaborator);
+  chooseDeveloper(event) {
+    var developer = event.target.getAttribute("value");
+    console.log(developer);
+    this.setState({
+      developerBtn: developer
+    });
   }
+
+
 
 
   render() {
@@ -90,7 +105,7 @@ class Nav extends React.Component {
             <ul className="right hide-on-med-and-down">
               <li>
                 <a className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='projectDrop'>Projects</a>
-                <ul id='projectDrop' className='dropdown-content collapsible' data-collapsible="accordion">
+                <ul id='projectDrop' className='dropdown-content collapsible' data-collapsible="accordion" onClick={this.resetModal}>
                   {this.state.allProjects.map((project, i) => {
                     return (
                       <li key={i}>
@@ -107,7 +122,7 @@ class Nav extends React.Component {
                 } > add task < /Button>}>
 
                   <div className="row">
-                    <form onChange={this.createTask} className="col s12">
+                    <form id="modalForm" onSubmit={this.createTask} className="col s12">
                       <div className="row">
                         <div className="input-field col s6">
                           <input name="newTitle" placeholder="" id="new-title" type="text" className="validate"/>
@@ -124,20 +139,24 @@ class Nav extends React.Component {
                           {/* <input name="newDeveloper" placeholder="" id="new-developer" type="text" className="validate"/>
                           <label htmlFor="new-developer">Developer</label> */}
 
-
+                          <span>Developer: </span>
                           {/* <!-- Dropdown Trigger --> */}
-                          <a id="devBtn" className='dropdown-button btn' href='#' data-activates='new-developer'>Developer</a>
+                          <a id="devBtn" className='dropdown-button btn' href='#' data-activates='new-developer'>{this.state.developerBtn}</a>
 
                           {/* <!-- Dropdown Structure --> */}
                           <ul name="newDeveloper" id='new-developer' className='dropdown-content'>
-                            {/* {this.state.allCollaborators.map((collaborator, i) => {
+                            {this.state.collaborators.map((collaborators, i) => {
                               return (
                                 <li key={i}>
-                                  <a value={collaborator.name} onClick={(event) => this.chooseCollaborator(event)} href="#!">{collaborator.name}</a>
+                                  <a id='new-developer' value={collaborators.login} onClick={(event) => this.chooseDeveloper(event)} href="#!">{collaborators.login}</a>
                                 </li>
                               )
                             })
-                            } */}
+                            }
+                            {/* <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="clark" name="newDeveloper">Clark</a></li>
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="paige" name="newDeveloper">Paige</a></li>
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="elton" name="newDeveloper">Elton</a></li>
+                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="potato" name="newDeveloper">Potato</a></li> */}
                           </ul>
 
 

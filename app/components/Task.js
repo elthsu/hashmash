@@ -123,7 +123,7 @@ class Task extends React.Component {
             <div id="chatWin" className="col l3 z-depth-5">
               {this.props.currentTask.comments.map(function(chat, i) {
                 return (
-                  <p className="chatMessage">{chat}</p>
+                  <p key={i} className="chatMessage">{chat}</p>
                 )
               })}
             </div>

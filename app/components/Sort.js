@@ -120,6 +120,7 @@ class Sort extends React.Component {
         <div className="container">
           <div id="searchBar" className="row z-depth-5">
             <div className="col s10 offset-s1">
+              {console.log(this.props)}
               <div className="input-field">
                 <i className="material-icons prefix">search</i>
                 <input id="search" type="search" className="validate" onChange={this.searchFilter} />
