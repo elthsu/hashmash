@@ -2,8 +2,7 @@
 var React = require("react");
 
 // socket connection
-var io = require("socket.io-client");
-var socket = io('http://localhost:3000');
+import {socket} from "../config/socket.js";
 
 // components
 var Nav = require("./Nav");
@@ -69,12 +68,6 @@ class Main extends React.Component {
     }
   }
 
-  _newTask(task) {
-    // won't work until user has joined a "room" (i.e. selected a project)
-    socket.emit("new", task);
-
-  }
-
   _updateTask() {
     // won't work until user has entered a "room" (i.e. selected a project)
     // id of task is required
@@ -119,7 +112,7 @@ class Main extends React.Component {
     console.log("props.id", this.state.currentTask);
     return (
       <div>
-      <Nav _newTask = {this._newTask} _selectProject={this._selectProject}
+      <Nav _selectProject={this._selectProject}
       allProjects = {this.state.allProjects}/>
 
       {this.props.children && React.cloneElement(this.props.children, {

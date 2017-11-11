@@ -2,8 +2,7 @@
 var React = require("react");
 
 // socket connection
-var io = require("socket.io-client");
-var socket = io('http://localhost:3000');
+import {socket} from "../config/socket.js";
 
 import {Modal, Button, Icon} from 'react-materialize';
 
