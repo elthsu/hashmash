@@ -145,7 +145,7 @@ class Main extends React.Component {
             </div>
             <div className="footer-copyright">
               <div className="container">
-                <div className="white-text">© 2017 Copyright #mash</div>
+                <div className="white-text">© {new Date().getFullYear()} Copyright #mash</div>
               </div>
             </div>
           </footer>

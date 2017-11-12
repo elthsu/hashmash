@@ -123,20 +123,25 @@
   #taskWin {
     border: 1px solid Peru;
     border-radius: 3px;
-    min-height: 600px;
+    min-height: 900px;
   }
 
-  #chatWin {
+  #chatWin,
+  #chatInputWin {
     border: 1px solid Peru;
     border-radius: 3px;
     margin-left: 30px;
     text-align: right;
-    height: 600px;
+    height: 680px;
     padding-top: 10px;
     overflow-x: hidden;
     overflow-y: auto;
-    margin-bottom: 50px;
+  }
 
+  #chatInputWin{
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 50px;
   }
 
   #chatInput {
