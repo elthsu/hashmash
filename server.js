@@ -134,15 +134,14 @@ io.on("connection", function(socket) {
 	// client sent update properties for task
 	socket.on("update", function(data) {
 		// required
-		console.log(data)
-		//if (!socket.room || !data.id) return;
+		if (!socket.room || !data.id) return;
 
 		// re-map object to fit into mongo's janky syntax
 		var obj = {};
 
 		for (var key in data) {
-			console.log(key)
-			obj["tasks.$." + key] = data[key];
+			if (key !== "id")
+				obj["tasks.$." + key] = data[key];
 		}
 
 		// update timestamp
@@ -151,12 +150,11 @@ io.on("connection", function(socket) {
 		db.projects.findAndModify({
 			query: {
 				name: socket.room,
-				tasks: {$elemMatch: {id: data.id}}
+				tasks: {$elemMatch: {id: parseInt(data.id)}}
 			},
 			update: {$set: obj},
 			new: true
 		}, function(err, docs) {
-			console.log(docs)
 			// if task no longer exists, cancel out
 			if (!docs) return;
 
