@@ -6,8 +6,6 @@ import {socket} from "../config/socket.js";
 
 // components
 var Nav = require("./Nav");
-var Sort = require("./Sort");
-var Task = require("./Task");
 
 class Main extends React.Component {
   constructor() {
@@ -35,12 +33,15 @@ class Main extends React.Component {
 		// receive initial project list and task properties
 		// will use this data to make drop-downs
 		socket.once("init", (data) => {
-
 			this.setState({
-				initialData: data,
         allProjects: data.projects
 			});
 
+      // on page load, check if already in a project
+      if (this.props.params.room) {
+        let room = this.props.params.room.replace(">", "/");
+        this._selectProject(room);
+      }
 		});
 
 		// client receives whole tasks array
@@ -52,8 +53,12 @@ class Main extends React.Component {
 
     //listen for contributors to populate for each project
     socket.on("collaborators", (data) => {
-      this.setState({collaborators: data})
+      this.setState({collaborators: data});
+    });
 
+    // kick user back to homepage on disconnect
+    socket.once("disconnect", (data) => {
+      window.location = "/";
     });
 	}
 
@@ -70,9 +75,12 @@ class Main extends React.Component {
       for (let i = 0; i < tasks.length; i++) {
         if (tasks[i].id.toString() === id) {
           this.setState({currentTask: tasks[i]});
-          break;
+          return;
         }
       }
+
+      // if no match, then they probably shouldn't be on this page
+      this.context.router.push(window.location.pathname.replace(/task\/.*/, ""));
     }
   }
 
@@ -157,5 +165,11 @@ class Main extends React.Component {
     );
   }
 }
+
+// this.props.history is deprecated
+Main.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+
 // Export the component back for use in other files
 module.exports = Main;
