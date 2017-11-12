@@ -78,7 +78,7 @@
           </div>
           <div class="footer-copyright">
             <div class="container">
-              <div class="white-text">© 2017 Copyright #mash</div>
+              <div id="copyrightText" class="white-text"></div>
             </div>
           </div>
         </footer>
@@ -86,7 +86,10 @@
     <script>
     $(document).ready(function(){
       $('.parallax').parallax();
+      $("#copyrightText").html("© " + new Date().getFullYear() +" Copyright #mash");
     });
+
+
     </script>
   </body>
 </html>
