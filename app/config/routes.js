@@ -11,6 +11,7 @@ import Main from "../components/Main";
 import Sort from "../components/Sort";
 import Task from "../components/Task";
 import Test from "../components/Test";
+import Welcome from "../components/Welcome";
 
 // Export the Routes
 module.exports = (
@@ -27,7 +28,7 @@ module.exports = (
       <Route path="project/:name" component={Sort} />
 
       {/* If user selects any other path... we get the Home Route */}
-      <IndexRoute component={Sort} />
+      <IndexRoute component={Welcome} />
 
     </Route>
   </Router>

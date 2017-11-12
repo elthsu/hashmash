@@ -194,7 +194,8 @@
   }
 
   #searchBar,
-  #mainPageWrap {
+  #mainPageWrap,
+  #welcomeText {
     border: 1px solid Peru;
     border-radius: 3px;
     margin-top: 50px;
@@ -203,6 +204,11 @@
 
   #mainPageWrap {
     padding: 30px 0;
+    min-height: 400px;
+  }
+
+  #welcomeText {
+    padding: 70px;
     min-height: 400px;
   }
 
