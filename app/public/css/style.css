@@ -205,7 +205,8 @@
     margin: 8px;
     text-align: center;
     padding: 10px;
-    background-color: palegoldenrod;
+    background-color: ivory;
+    border: 1px solid saddlebrown;
     border-radius: 25px;
   }
 
