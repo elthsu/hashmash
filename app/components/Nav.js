@@ -79,6 +79,11 @@ class Nav extends React.Component {
     this.setState({developerBtn: developer});
   }
 
+  getName(project) {
+    // make url-friendly name
+    return "/" + project.name.replace("/", ">");
+  }
+
   render() {
     var newTask;
     if (this.props.project === "") {
@@ -101,7 +106,7 @@ class Nav extends React.Component {
                   {this.state.allProjects.map((project, i) => {
                     return (
                       <li key={i}>
-                        <Link to="/sort" value={project.name} onClick={(event) => this.chooseProject(event)} href="#!">{project.name}</Link>
+                        <Link to={this.getName(project)} value={project.name} onClick={(event) => this.chooseProject(event)} href="#!">{project.name}</Link>
                       </li>
                     )
                   })

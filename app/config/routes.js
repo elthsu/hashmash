@@ -20,12 +20,9 @@ module.exports = (
     <Route path="/" component={Main} >
 
       {/* If user selects Search or Saved show the appropriate component */}
-      <Route path="sort" component={Sort}/>
-      <Route path="test" component={Test} />
-      <Route path="task/:id" component={Task} />
 
-      <Route path="project/:name/task/:id" component={Task} />
-      <Route path="project/:name" component={Sort} />
+      <Route path="/:room" component={Sort} />
+      <Route path="/:room/task/:id" component={Task} />
 
       {/* If user selects any other path... we get the Home Route */}
       <IndexRoute component={Welcome} />

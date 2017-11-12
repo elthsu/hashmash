@@ -14,6 +14,8 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
 io.on("connection", function(socket) {
+	var rooms = [];
+
 	// client logged in
 	socket.on("login", function(data) {
 		// who's got the cookie
@@ -30,6 +32,9 @@ io.on("connection", function(socket) {
 				obj.projects.push({
 					name: repos[i].full_name
 				});
+
+				// save project list in upper scope
+				rooms.push(repos[i].full_name);
 			}
 
 			// consolidate db queries into promise chain
@@ -59,6 +64,12 @@ io.on("connection", function(socket) {
 		// leave original room, if in one
 		if (socket.room)
 			socket.leave(socket.room);
+
+		// bar access to rooms not in list
+		if (rooms.indexOf(data) === -1) {
+			socket.disconnect();
+			return;
+		}
 
 		socket.room = data;
 		socket.join(data);

@@ -97,7 +97,7 @@ class Sort extends React.Component {
     })
     // then convert to jsx elements
     .map((task, i) => {
-      let url = "/task/" + task.id;
+      let url = `/${this.props.params.room}/task/${task.id}`;
 
       return (
         <tr key={i}>
