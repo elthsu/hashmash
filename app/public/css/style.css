@@ -145,11 +145,6 @@
     margin-bottom: 50px;
   }
 
-  #chatInput {
-    min-height: 50px;
-    overflow: hidden;
-  }
-
   #chatBtn {
     margin-bottom: 30px;
     background-color: saddlebrown;
@@ -242,7 +237,7 @@
   .material-icons {
     margin: 0;
     padding: 0;
-
+    cursor: default;
   }
 
   .gitAuth {

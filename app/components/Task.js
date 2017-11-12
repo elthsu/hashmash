@@ -1,5 +1,6 @@
 // Include React
 var React = require("react");
+var moment = require("moment");
 
 // socket connection
 import {socket} from "../config/socket.js";
@@ -14,61 +15,122 @@ class Task extends React.Component {
     super();
 
     this.state = {
-      project: {},
-      tasks: [],
-      currentTask: {},
-      chat: []
+      editing: false
     };
 
     this.update = this.update.bind(this);
+    this.editMode = this.editMode.bind(this);
+    this.saveChanges = this.saveChanges.bind(this);
   }
 
+  componentDidMount() {
+    $('.dropdown-button').dropdown();
+  }
 
+  componentDidUpdate(prevProps, prevState) {
+    // auto focus editable field
+    if (prevState.editing !== this.state.editing && this.state.editing !== false) {
+      $("#edit-" + this.state.editing).focus();
+    }
+  }
 
-componentDidMount() {
-  $('.dropdown-button').dropdown();
-}
+  //this function is called when the drop-downs are changed
+  update(e) {
+    let newVal = e.target.getAttribute("value");
+    let taskKey = e.target.parentElement.parentElement.getAttribute("data-task");
 
-update(e) {
+    socket.emit("update", {
+      id: this.props.currentTask.id,
+      [taskKey]: newVal
+    });
+  }
 
-let newVal = e.target.getAttribute("value");
-let taskKey = e.target.parentElement.parentElement.getAttribute("data-task");
+  //this function is called when the user clicks on the "edit" icon beside each key in the task and changes the text to an editable field to update task keys
+  editMode(e) {
+    this.setState({
+      editing: e.target.getAttribute("data-update")
+    });
+  }
 
-this.props._updateTask(newVal, taskKey);
-}
+  // on blur, save last edit box to db
+  saveChanges(e) {
+    socket.emit("update", {
+      id: this.props.currentTask.id,
+      [this.state.editing]: e.target.value
+    });
 
+    this.setState({
+      editing: false
+    });
+  }
 
   render() {
-    console.log(this.state.chat)
-    console.log(Modal.actions)
+    // editable text fields
+    var title, description, timeSpent, timeEstimate;
 
-    var calc = (30/180).toFixed(2);
-
-    calc = ((calc * 100) + "%");
-
-    var barTextChecker = parseInt(calc);
-    if (barTextChecker > 20) {
-
+    // toggle 'em up
+    if (this.state.editing === "title") {
+      title = (<input id="edit-title" defaultValue={this.props.currentTask.title} onBlur={this.saveChanges} type='text' className='validate' />);
     }
+    else {
+      title = (<span><i data-update="title" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.title}</span>);
+    }
+
+    if (this.state.editing === "description") {
+      description = (<textarea id="edit-description" defaultValue={this.props.currentTask.description} onBlur={this.saveChanges} className='materialize-textarea'></textarea>);
+    }
+    else {
+      description = (<div><i data-update="description" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.description}</div>);
+    }
+
+    if (this.state.editing === "timeSpent") {
+      timeSpent = (<input id="edit-timeSpent" defaultValue={this.props.currentTask.timeSpent} onBlur={this.saveChanges} className='materialize-textarea' type="number" />);
+    }
+    else {
+      timeSpent = (<span><i data-update="timeSpent" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.timeSpent}</span>);
+    }
+
+    if (this.state.editing === "timeEstimate") {
+      timeEstimate = (<input id="edit-timeEstimate" defaultValue={this.props.currentTask.timeEstimate} onBlur={this.saveChanges} className='materialize-textarea' type="number" />);
+    }
+    else {
+      timeEstimate = (<span><i data-update="timeEstimate" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.timeEstimate}</span>);
+    }
+
+    // calculate width of time bar
+    var calc = (this.props.currentTask.timeSpent/this.props.currentTask.timeEstimate*100);
+
     var bar = {
-      width: calc
+      width: calc + "%"
     };
-
-
 
     return (
         <div className="container">
           <div className="row">
           <div className="col s12 pathing">
-            <h5> {this.props.project}>{this.props.currentTask.title}</h5>
+            <h5> {this.props.project} &gt; {this.props.currentTask.title}</h5>
           </div>
           </div>
           <div className="row">
             <div id="taskWin" className="col l8 z-depth-5">
-              <h5 className="taskText">ID: {this.props.currentTask.id}</h5>
-              <h5 className="taskText">{this.props.currentTask.title}</h5>
-              <h5 className="taskText">Developer: {this.props.currentTask.owner}</h5>
-              <h6 className="taskText">Description:<br />{this.props.currentTask.description}</h6>
+              <h5 className="taskText">Task #{this.props.currentTask.id}</h5>
+              <h5 className="taskText">{title}</h5>
+              <h5 className="taskText">
+                Owner:
+
+                <a className='dropdown-button btn' data-activates='change-developer' data-beloworigin="true">{this.props.currentTask.owner || "N/A"}</a>
+
+                <ul id='change-developer' data-task="owner" className='dropdown-content'>
+                  {this.props.collaborators.map((user, i) => {
+                    return (
+                      <li key={i}>
+                        <a value={user.login} onClick={this.update}>{user.login}</a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </h5>
+              <h6 className="taskText">Description: <br/> {description}</h6>
               <div className="row center">
                 <div className="col s4 taskDrop">
                   <a className='dropdown-button btn' data-beloworigin="true"  data-activates='updatepriority'>{this.props.currentTask.priority}</a>
@@ -98,22 +160,22 @@ this.props._updateTask(newVal, taskKey);
                 </div>
               </div>
               <div id="timeBox" className="row">
-                  <div className="col l6"><h5>Time Used: 02hr 41min</h5></div>
-                  <div className="col l6 center"><h5>Time Allocated: {this.props.currentTask.timeEstimate}</h5></div>
+                  <div className="col l6"><h5>Time Spent: {timeSpent}</h5></div>
+                  <div className="col l6 center"><h5>Time Estimated: {timeEstimate}</h5></div>
               </div>
               <div className="row">
                 <div className="col s12">
                   <div className="progress bar z-depth-1">
                       <div className="determinate" style={bar}>
-                        <div className="barText">Time Used</div>
+                        <div className="barText"></div>
                       </div>
                   </div>
                 </div>
               </div>
               <div className="row">
                 <div className="col l12">
-                  <h6 className="taskText">Date Created: {this.props.currentTask.dateCreated}</h6>
-                  <h6 className="taskText">Date Last Updated: {this.props.currentTask.dateModified}</h6>
+                  <h6 className="taskText">Date Created: {moment(this.props.currentTask.dateCreated).format("YYYY-MM-DD hh:mm A")}</h6>
+                  <h6 className="taskText">Date Last Updated: {moment(this.props.currentTask.dateModified).format("YYYY-MM-DD hh:mm A")}</h6>
                 </div>
               </div>
             </div>
