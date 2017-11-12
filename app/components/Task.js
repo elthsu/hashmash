@@ -21,6 +21,7 @@ class Task extends React.Component {
     };
 
     this.update = this.update.bind(this);
+    this.editMode = this.editMode.bind(this);
   }
 
 
@@ -29,12 +30,29 @@ componentDidMount() {
   $('.dropdown-button').dropdown();
 }
 
+
+//this function is called when the drop-downs are changed
 update(e) {
 
 let newVal = e.target.getAttribute("value");
 let taskKey = e.target.parentElement.parentElement.getAttribute("data-task");
 
-this.props._updateTask(newVal, taskKey);
+let id = this.props.params.id
+// won't work until user has entered a "room" (i.e. selected a project)
+// id of task is required
+socket.emit("update", {
+  id: id,
+  [taskKey]: newVal
+});
+}
+
+
+//this function is called when the user clicks on the "edit" icon beside each key in the task and changes the text to an editable field to update task keys. Still needs to be sent to the backend with the socket.emit("update") and add a trigger to save the change and remove the text field 
+editMode(e) {
+ let updateKey = e.target.getAttribute("data-update");
+ let currentVal = this.props.currentTask[updateKey];
+
+ e.target.parentElement.innerHTML = "<div className='row'><div className='input-field col s6'><input value=" + "'" + currentVal + "'" + "id='first_name2' type='text' className='validate'><label className='active' for='first_name2'>First Name</label></div></div>";
 }
 
 
@@ -66,9 +84,9 @@ this.props._updateTask(newVal, taskKey);
           <div className="row">
             <div id="taskWin" className="col l8 z-depth-5">
               <h5 className="taskText">ID: {this.props.currentTask.id}</h5>
-              <h5 className="taskText">{this.props.currentTask.title}</h5>
-              <h5 className="taskText">Developer: {this.props.currentTask.owner}</h5>
-              <h6 className="taskText">Description:<br />{this.props.currentTask.description}</h6>
+              <h5 className="taskText"><i data-update="title" className="tiny material-icons" onClick={this.editMode}>edit</i>{this.props.currentTask.title}</h5>
+              <h5 className="taskText"><i data-update="owner" className="tiny material-icons" onClick={this.editMode}>edit</i>Developer: {this.props.currentTask.owner}</h5>
+              <h6 className="taskText">Description:<br /><i data-update="description" className="tiny material-icons" onClick={this.editMode}>edit</i>{this.props.currentTask.description}</h6>
               <div className="row center">
                 <div className="col s4 taskDrop">
                   <a className='dropdown-button btn' data-beloworigin="true"  data-activates='updatepriority'>{this.props.currentTask.priority}</a>
@@ -98,7 +116,7 @@ this.props._updateTask(newVal, taskKey);
                 </div>
               </div>
               <div id="timeBox" className="row">
-                  <div className="col l6"><h5>Time Used: 02hr 41min</h5></div>
+                  <div className="col l6"><h5><i data-update="timeSpent" className="tiny material-icons" onClick={this.editMode}>edit</i>Time Used: 02hr 41min</h5></div>
                   <div className="col l6 center"><h5>Time Allocated: {this.props.currentTask.timeEstimate}</h5></div>
               </div>
               <div className="row">
