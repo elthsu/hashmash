@@ -8,7 +8,6 @@ import {Modal, Button, Icon} from 'react-materialize';
 
 import {Link} from "react-router";
 
-
 class Nav extends React.Component {
 
   constructor() {
@@ -41,40 +40,33 @@ class Nav extends React.Component {
     this.setState({collaborators: props.collaborators});
   }
 
-  componentDidUpdate(prevProps, prevState) {
-  }
-
   createTask(event) {
     this.setState({
       [event.target.name]: event.target.value
     });
   }
 
-
-
   handleSubmit() {
-    socket.emit("new",
-      {
-        title: this.state.newTitle,
-        description: this.state.newDescription,
-        owner: this.state.developerBtn,
-        priority: this.state.newPriority,
-        status: this.state.newStatus,
-        type: this.state.newType,
-        timeEstimate: this.state.newEstimate
-      }
-    );
-    document.getElementById("modalForm").reset();
-    this.setState({
-      developerBtn: "Developer"
+    var developer = this.state.developerBtn;
+    console.log(developer);
+    if (developer === "Developer") {
+      developer = null;
+    }
+    socket.emit("new", {
+      title: this.state.newTitle,
+      description: this.state.newDescription,
+      owner: developer,
+      priority: this.state.newPriority,
+      status: this.state.newStatus,
+      type: this.state.newType,
+      timeEstimate: this.state.newEstimate
     });
+    this.resetModal();
   }
 
   resetModal() {
     document.getElementById("modalForm").reset();
-    this.setState({
-      developerBtn: "Developer"
-    });
+    this.setState({developerBtn: "Developer"});
   }
 
   chooseProject(event) {
@@ -84,16 +76,16 @@ class Nav extends React.Component {
 
   chooseDeveloper(event) {
     var developer = event.target.getAttribute("value");
-    console.log(developer);
-    this.setState({
-      developerBtn: developer
-    });
+    this.setState({developerBtn: developer});
   }
 
-
-
-
   render() {
+    var newTask;
+    if (this.props.project === "") {
+      newTask = {display: "none"};
+    } else {
+      newTask = {display: "inline-block"};
+    };
     return (
       <div>
         <nav>
@@ -109,15 +101,15 @@ class Nav extends React.Component {
                   {this.state.allProjects.map((project, i) => {
                     return (
                       <li key={i}>
-                    <Link to="/sort" value={project.name} onClick={(event)=>this.chooseProject(event)} href="#!">{project.name}</Link>
+                        <Link to="/sort" value={project.name} onClick={(event) => this.chooseProject(event)} href="#!">{project.name}</Link>
                       </li>
                     )
                   })
-                  }
+}
                 </ul>
               </li>
               <li>
-                <Modal header='New Task' trigger={< a waves = 'light' > New Task < /a>} actions={< Button className = "btn waves-effect waves-light btn-flat modal-action modal-close z-depth-2" waves = 'light' id = "add-task" onClick = {
+                <Modal header='New Task' trigger={< a style = {newTask} waves = 'light' > New Task < /a>} actions={< Button className = "btn waves-effect waves-light btn-flat modal-action modal-close z-depth-2" waves = 'light' id = "add-task" onClick = {
                   this.handleSubmit
                 } > add task < /Button>}>
 
@@ -129,7 +121,6 @@ class Nav extends React.Component {
                           <label htmlFor="new-title">Title</label>
                         </div>
 
-
                         <div className="input-field col s2">
                           <input placeholder="" name="newEstimate" id="new-estimate" type="number" className="validate"/>
                           <label htmlFor="new-number">Time Est. (Min)</label>
@@ -137,9 +128,10 @@ class Nav extends React.Component {
 
                         <div className="input-field col s2 offset-s1">
                           {/* <input name="newDeveloper" placeholder="" id="new-developer" type="text" className="validate"/>
-                          <label htmlFor="new-developer">Developer</label> */}
+                                        <label htmlFor="new-developer">Developer</label> */}
 
-                          <span>Developer: </span>
+                          <span>Developer:
+                          </span>
                           {/* <!-- Dropdown Trigger --> */}
                           <a id="devBtn" className='dropdown-button btn' href='#' data-activates='new-developer'>{this.state.developerBtn}</a>
 
@@ -153,13 +145,12 @@ class Nav extends React.Component {
                                 </li>
                               )
                             })
-                            }
+}
                             {/* <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="clark" name="newDeveloper">Clark</a></li>
-                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="paige" name="newDeveloper">Paige</a></li>
-                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="elton" name="newDeveloper">Elton</a></li>
-                            <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="potato" name="newDeveloper">Potato</a></li> */}
+                                          <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="paige" name="newDeveloper">Paige</a></li>
+                                          <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="elton" name="newDeveloper">Elton</a></li>
+                                          <li><a href="#!" onClick={(event)=>this.chooseDeveloper(event)} value="potato" name="newDeveloper">Potato</a></li> */}
                           </ul>
-
 
                         </div>
                       </div>
@@ -234,7 +225,9 @@ class Nav extends React.Component {
                 </Modal>
               </li>
               <li>
-                <a id="logout" href="/logout" waves='light'> Log Out </a>
+                <a id="logout" href="/logout" waves='light'>
+                  Log Out
+                </a>
               </li>
             </ul>
           </div>

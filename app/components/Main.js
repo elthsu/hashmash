@@ -14,7 +14,7 @@ class Main extends React.Component {
     super();
 
     this.state = {
-      project: {},
+      project: "",
       tasks: [],
       collaborators: [],
       allProjects: [],
@@ -34,7 +34,6 @@ class Main extends React.Component {
 		// receive initial project list and task properties
 		// will use this data to make drop-downs
 		socket.once("init", (data) => {
-			console.log(data.projects);
 
 			this.setState({
 				initialData: data,
@@ -52,7 +51,6 @@ class Main extends React.Component {
 
     //listen for contributors to populate for each project
     socket.on("collaborators", (data) => {
-      console.log("all collaborators", data);
       this.setState({collaborators: data})
 
     });
@@ -114,11 +112,10 @@ class Main extends React.Component {
   }
 
   render() {
-    console.log("props.id", this.state.currentTask);
     return (
       <div>
       <Nav _selectProject={this._selectProject}
-      allProjects = {this.state.allProjects} collaborators = {this.state.collaborators}/>
+      allProjects = {this.state.allProjects} collaborators = {this.state.collaborators} project={this.state.project}/>
 
       {this.props.children && React.cloneElement(this.props.children, {
       tasks: this.state.tasks, _selectTask: this._selectTask, currentTask: this.state.currentTask
