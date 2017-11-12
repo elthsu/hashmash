@@ -135,6 +135,11 @@
     padding-top: 10px;
   }
 
+  #chatInput {
+    min-height: 50px;
+    overflow: hidden;
+  }
+
   .taskText {
     padding: 10px 50px 0 50px;
   }
