@@ -125,6 +125,7 @@
     border: 1px solid Peru;
     border-radius: 3px;
     min-height: 600px;
+    margin-bottom: 40px;
   }
 
   #chatWin,

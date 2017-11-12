@@ -57,7 +57,6 @@ class Chat extends React.Component {
   }
 
   componentDidUpdate(){
-
     this.updateScroll();
   }
 
