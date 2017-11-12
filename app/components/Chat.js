@@ -66,7 +66,7 @@ class Chat extends React.Component {
 
     return (
       <div>
-        <div id="chatWin" className="col l3 z-depth-5">
+        <div id="chatWin" className="col l5 offset-1 z-depth-5">
           {this.props.comments.map(function(chat, i) {
             return (
               <div key={i}>
@@ -76,7 +76,7 @@ class Chat extends React.Component {
             )
           })}
         </div>
-        <div id="chatInputWin" className="col l3 z-depth-5">
+        <div id="chatInputWin" className="col l5 offset-1 z-depth-5">
           <form>
             <textarea
               id="chatInput"

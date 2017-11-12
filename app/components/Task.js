@@ -73,28 +73,28 @@ class Task extends React.Component {
       title = (<input id="edit-title" defaultValue={this.props.currentTask.title} onBlur={this.saveChanges} type='text' className='validate' />);
     }
     else {
-      title = (<span><i data-update="title" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.title}</span>);
+      title = (<span>{this.props.currentTask.title} <i data-update="title" className="tiny material-icons" onClick={this.editMode}>edit</i> </span>);
     }
 
     if (this.state.editing === "description") {
       description = (<textarea id="edit-description" defaultValue={this.props.currentTask.description} onBlur={this.saveChanges} className='materialize-textarea'></textarea>);
     }
     else {
-      description = (<div><i data-update="description" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.description}</div>);
+      description = (<div>{this.props.currentTask.description} <i data-update="description" className="tiny material-icons" onClick={this.editMode}>edit</i></div>);
     }
 
     if (this.state.editing === "timeSpent") {
       timeSpent = (<input id="edit-timeSpent" defaultValue={this.props.currentTask.timeSpent} onBlur={this.saveChanges} className='materialize-textarea' type="number" />);
     }
     else {
-      timeSpent = (<span><i data-update="timeSpent" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.timeSpent}</span>);
+      timeSpent = (<span>{this.props.currentTask.timeSpent} min. <i data-update="timeSpent" className="tiny material-icons" onClick={this.editMode}>edit</i></span>);
     }
 
     if (this.state.editing === "timeEstimate") {
       timeEstimate = (<input id="edit-timeEstimate" defaultValue={this.props.currentTask.timeEstimate} onBlur={this.saveChanges} className='materialize-textarea' type="number" />);
     }
     else {
-      timeEstimate = (<span><i data-update="timeEstimate" className="tiny material-icons" onClick={this.editMode}>edit</i> {this.props.currentTask.timeEstimate}</span>);
+      timeEstimate = (<span>{this.props.currentTask.timeEstimate} min. <i data-update="timeEstimate" className="tiny material-icons" onClick={this.editMode}>edit</i></span>);
     }
 
     // calculate width of time bar
@@ -112,13 +112,12 @@ class Task extends React.Component {
           </div>
           </div>
           <div className="row">
-            <div id="taskWin" className="col l8 z-depth-5">
-              <h5 className="taskText">Task #{this.props.currentTask.id}</h5>
-              <h5 className="taskText">{title}</h5>
+            <div id="taskWin" className="col l6 z-depth-5">
+              <h5 className="taskText">Task ID#: {this.props.currentTask.id}</h5>
+              <h5 className="taskText">Title: {title}</h5>
               <h5 className="taskText">
-                Owner:
-
-                <a className='dropdown-button btn' data-activates='change-developer' data-beloworigin="true">{this.props.currentTask.owner || "N/A"}</a>
+                Developer:
+                <a id="developerDrop" className='dropdown-button btn' data-activates='change-developer' data-beloworigin="true"> {this.props.currentTask.owner || "N/A"}</a>
 
                 <ul id='change-developer' data-task="owner" className='dropdown-content'>
                   {this.props.collaborators.map((user, i) => {
@@ -131,17 +130,19 @@ class Task extends React.Component {
                 </ul>
               </h5>
               <h6 className="taskText">Description: <br/> {description}</h6>
-              <div className="row center">
-                <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn' data-beloworigin="true"  data-activates='updatepriority'>{this.props.currentTask.priority}</a>
+              <div className="row taskBtns">
+                <div className="col l4"><span>Priority: </span>
+                  <a className='dropdown-button btn taskDrop' data-beloworigin="true"  data-activates='updatepriority'>{this.props.currentTask.priority}</a>
                   <ul name='updatepriority' data-task="priority" id='updatepriority' className='dropdown-content collapsible' data-collapsible="accordion">
                     <li><a value="critical" onClick={this.update}>Critical</a></li>
                     <li><a value="normal" onClick={this.update}>Normal</a></li>
                     <li><a value="backburner" onClick={this.update}>Backburner</a></li>
                   </ul>
                 </div>
-                <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='statusDrop'>{this.props.currentTask.status}</a>
+              </div>
+                <div className="row taskBtns">
+                <div className="col l4">Status:
+                  <a className='dropdown-button btn taskDrop' data-beloworigin="true" href='#' data-activates='statusDrop'>{this.props.currentTask.status}</a>
                   <ul id='statusDrop' data-task="status" className='dropdown-content '>
                     <li><a value="to do" onClick={this.update}>To Do</a></li>
                     <li><a value="in progress" onClick={this.update}>In Progress</a></li>
@@ -150,8 +151,10 @@ class Task extends React.Component {
                     <li><a value="done" onClick={this.update}>Done</a></li>
                   </ul>
                 </div>
-                <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='typeDrop'>{this.props.currentTask.type}</a>
+              </div>
+                <div className="row taskBtns">
+                <div className="col l4">Type:
+                  <a className='dropdown-button btn taskDrop' data-beloworigin="true" href='#' data-activates='typeDrop'>{this.props.currentTask.type}</a>
                   <ul id='typeDrop' data-task="type" className='dropdown-content'>
                     <li><a value="feature" onClick={this.update}>Feature</a></li>
                     <li><a value="bug" onClick={this.update}>Bug</a></li>
@@ -160,8 +163,8 @@ class Task extends React.Component {
                 </div>
               </div>
               <div id="timeBox" className="row">
-                  <div className="col l6"><h5>Time Spent: {timeSpent}</h5></div>
-                  <div className="col l6 center"><h5>Time Estimated: {timeEstimate}</h5></div>
+                  <div className="col l6"><h5>Time Used: {timeSpent}</h5></div>
+                  <div className="col l6 center"><h5>Time Est: {timeEstimate}</h5></div>
               </div>
               <div className="row">
                 <div className="col s12">

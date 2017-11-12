@@ -138,7 +138,7 @@ class Nav extends React.Component {
                           <span>Developer:
                           </span>
                           {/* <!-- Dropdown Trigger --> */}
-                          <a id="devBtn" className='dropdown-button btn' href='#' data-activates='new-developer'>{this.state.developerBtn}</a>
+                          <a id="devBtn" className='dropdown-button btn' data-beloworigin="true" href='#' data-activates='new-developer'>{this.state.developerBtn}</a>
 
                           {/* <!-- Dropdown Structure --> */}
                           <ul name="newDeveloper" id='new-developer' className='dropdown-content'>
