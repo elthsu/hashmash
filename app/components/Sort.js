@@ -118,6 +118,11 @@ class Sort extends React.Component {
     return (
       <div>
         <div className="container">
+          <div className="row">
+            <div className="col s12 pathing center">
+              <h5><strong>Project: </strong> {this.props.project}</h5>
+            </div>
+          </div>
           <div id="searchBar" className="row z-depth-5">
             <div className="col s10 offset-s1">
               {console.log(this.props)}
