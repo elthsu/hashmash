@@ -131,8 +131,12 @@
     border-radius: 3px;
     margin-left: 30px;
     text-align: right;
-    min-height: 600px;
+    height: 600px;
     padding-top: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-bottom: 50px;
+
   }
 
   #chatInput {
@@ -215,11 +219,14 @@
   #mainPageWrap {
     padding: 30px 0;
     min-height: 400px;
+    margin-bottom: 50px;
   }
 
   #welcomeText {
     padding: 70px;
-    min-height: 400px;
+    height: 400px;
+    margin-bottom: 50px;
+
   }
 
   th:hover {
@@ -355,4 +362,12 @@
   #projectDrop {
 
     width: 290px !important;
+    max-height: 450px !important;
+    overflow-y: scroll;
+  }
+
+  #new-developer {
+
+    max-height: 350px !important;
+    overflow-y: scroll;
   }
