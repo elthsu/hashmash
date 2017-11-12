@@ -14,7 +14,7 @@ class Main extends React.Component {
     super();
 
     this.state = {
-      project: {},
+      project: "",
       tasks: [],
       collaborators: [],
       allProjects: [],
@@ -35,7 +35,6 @@ class Main extends React.Component {
 		// receive initial project list and task properties
 		// will use this data to make drop-downs
 		socket.once("init", (data) => {
-			console.log(data.projects);
 
 			this.setState({
 				initialData: data,
@@ -53,7 +52,6 @@ class Main extends React.Component {
 
     //listen for contributors to populate for each project
     socket.on("collaborators", (data) => {
-      console.log("all collaborators", data);
       this.setState({collaborators: data})
 
     });
@@ -103,28 +101,58 @@ class Main extends React.Component {
     socket.emit("delete", {id: 1});
   }
 
-  _sendChat() {
-    // normally, this would be tied to state, but since we're testing and all...
-    var txt = document.getElementById("chat").value;
-
-    // chat message should include id of task
-    socket.emit("chat", {
-      id: 1,
-      user: "elton bo belton",
-      message: txt
-    });
-  }
-
   render() {
-    console.log("props.id", this.state.currentTask);
     return (
       <div>
       <Nav _selectProject={this._selectProject}
-      allProjects = {this.state.allProjects} collaborators = {this.state.collaborators}/>
+      allProjects = {this.state.allProjects} collaborators = {this.state.collaborators} project={this.state.project}/>
 
       {this.props.children && React.cloneElement(this.props.children, {_updateTask: this._updateTask,
       project: this.state.project, tasks: this.state.tasks, _selectTask: this._selectTask, currentTask: this.state.currentTask
 })}
+  
+      <footer className="page-footer">
+            <div className="container">
+              <div className="row">
+                <div className="col l9 s12">
+                  <div className="grey-text text-lighten-4">
+                    <div className="row">
+                      <div className="col s6">
+                        <h5 className="white-text">Thank You For Using #mash!</h5>
+                        <div className="white-text">
+                          We hope you have enjoyed using #mash! If you feel #mash has helped you out and want to support the team, send us over a donation! Any amount would help support and continue development on this project and is greatly appreciated.
+                          <p><a className="waves-effect waves-light btn" href="https://paypal.me/HashMash" target="_blank">Donate</a></p>
+
+                        </div>
+                      </div>
+                      <div className="col s6">
+                        <h5 className="white-text">Talk to Us!</h5>
+                        <div className="white-text">
+                          Talk to us directly about new features, future goals, general problems or questions, or anything else you can think of.
+                          <p><a className="waves-effect waves-light btn" href="https://gitter.im/hash-mash/Lobby" target="_blank">Talk to Us!</a></p>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+                <div className="col l3 s12">
+                  <h5 className="white-text">Connect</h5>
+                  <ul>
+                    <li className="footerLi"><a className="grey-text text-lighten-3" href="https://github.com/elthsu/triloGira" target="_blank"><img className="footerGitLogo" src="img/gitLogo.png" />  #mash</a></li>
+                    <li className="footerLi"><a className="grey-text text-lighten-3" href="https://github.com/clarknielsen" target="_blank"><img className="gitAvatarImg" src="https://avatars3.githubusercontent.com/u/26048346?s=460&v=4" />  Clark Nielsen</a></li>
+                    <li><a className="grey-text text-lighten-3" href="https://github.com/paigepittman" target="_blank"><img className="gitAvatarImg" src="https://avatars1.githubusercontent.com/u/25652409?s=460&v=4" />  Paige Pittman</a></li>
+                    <li><a className="grey-text text-lighten-3" href="https://github.com/elthsu" target="_blank"><img className="gitAvatarImg" src="https://avatars3.githubusercontent.com/u/29214773?s=460&v=4" />  Elton Hsu</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="footer-copyright">
+              <div className="container">
+                <div className="white-text">© {new Date().getFullYear()} Copyright #mash</div>
+              </div>
+            </div>
+          </footer>
+
     </div>
     );
   }

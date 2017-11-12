@@ -91,7 +91,6 @@ io.on("connection", function(socket) {
 
 	// client tried to make a new task object
 	socket.on("new", function(data) {
-		console.log(data)
 		// need to be in a room first, buddy
 		if (!socket.room) return;
 
@@ -182,6 +181,12 @@ io.on("connection", function(socket) {
 		// required
 		if (!socket.room || !data.id) return;
 
+		var name = "";
+
+		// check for cookie
+		if (socket.request.headers.cookie.indexOf("username=") > 0)
+			name = socket.request.headers.cookie.match(/username=([^;]*)/)[1];
+
 		// add comment to nested task object
 		db.projects.findAndModify({
 			query: {
@@ -191,7 +196,7 @@ io.on("connection", function(socket) {
 			update: {
 				$push: {
 					"tasks.$.comments": {
-						user: data.user,
+						name: name,
 						message: data.message,
 						dateCreated: new Date()
 					}
@@ -233,10 +238,15 @@ app.get("/", function(req, res) {
 	else if (req.cookies && req.cookies.github) {
 		// use existing token to verify login
 		axios.get("https://api.github.com/user?" + req.cookies.github).then(function(data) {
+			// save user's name
+			res.cookie("username", data.data.login);
+
 			res.sendFile(path.join(__dirname, "./app/public/index.html"));
 		}).catch(function(error) {
 			// auth failed, so get rid of cookie
 			res.clearCookie("github");
+			res.clearCookie("username");
+
 			res.sendFile(path.join(__dirname, "./app/public/gitAuth.html"));
 		});
 	}
@@ -249,6 +259,8 @@ app.get("/", function(req, res) {
 app.get("/logout", function(req, res) {
 	// wipe cookies and redirect to login page
 	res.clearCookie("github");
+	res.clearCookie("username");
+
 	res.redirect("/");
 });
 

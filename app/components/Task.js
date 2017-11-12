@@ -118,7 +118,7 @@ this.props._updateTask(newVal, taskKey);
               </div>
             </div>
             <div className="col l1"></div>
-            <Chat comments={this.props.currentTask.comments} />
+            <Chat taskId={this.props.currentTask.id} comments={this.props.currentTask.comments} />
           </div>
         </div>
     );
