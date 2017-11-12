@@ -124,7 +124,7 @@
   #taskWin {
     border: 1px solid Peru;
     border-radius: 3px;
-    min-height: 900px;
+    min-height: 600px;
   }
 
   #chatWin,
@@ -133,7 +133,7 @@
     border-radius: 3px;
     margin-left: 30px;
     text-align: right;
-    height: 680px;
+    height: 380px;
     padding-top: 10px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -152,11 +152,12 @@
 
   .taskText {
     padding: 10px 50px 0 50px;
+    margin-bottom: 30px;
   }
 
   .taskDrop {
-    margin: 0;
-    margin-top: 30px;
+    margin-top: 5px;
+    width: 175px;
   }
 
   #timeBox {
@@ -375,4 +376,18 @@
 
   .white-text {
     color: white !important;
+  }
+
+  #developerDrop{
+    margin-left: 30px !important;
+  }
+
+  #change-developer{
+    min-width: 200px;
+  }
+
+  .taskBtns{
+    padding-left: 50px;
+    margin-left: 30px;
+
   }
