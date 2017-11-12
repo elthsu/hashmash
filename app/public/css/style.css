@@ -140,6 +140,11 @@
     overflow: hidden;
   }
 
+  #chatBtn {
+    margin-bottom: 30px;
+    background-color: saddlebrown;
+  }
+
   .taskText {
     padding: 10px 50px 0 50px;
   }

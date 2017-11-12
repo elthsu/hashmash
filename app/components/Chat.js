@@ -9,8 +9,7 @@ class Chat extends React.Component {
     super();
 
     this.state = {
-      message: "",
-      height: "0px"
+      message: ""
     };
 
     this.updateMessage = this.updateMessage.bind(this);
@@ -27,14 +26,16 @@ class Chat extends React.Component {
   updateMessage(e) {
     // link input box to state
     this.setState({
-      message: e.target.value,
-      height: document.getElementById("chatInput").scrollHeight + "px"
+      message: e.target.value
     });
   }
 
   sendMessage(e) {
     e.preventDefault();
 
+    if (this.state.message === "") {
+      return;
+    }
     // send chat to server
     socket.emit("chat", {
       id: this.props.taskId,
@@ -43,16 +44,12 @@ class Chat extends React.Component {
 
     // clear values
     this.setState({
-      message: "",
-      height: "0px"
+      message: ""
     });
   }
 
   render() {
     // dynamically grow/shrink textarea
-    var styles = {
-      height: this.state.height
-    };
 
     return (
       <div id="chatWin" className="col l3 z-depth-5">
@@ -65,17 +62,17 @@ class Chat extends React.Component {
           )
         })}
 
-        <form onSubmit={this.sendMessage}>
-          <textarea 
+        <form>
+          <textarea
             id="chatInput"
-            style={styles}
-            onChange={this.updateMessage} 
+            className="materialize-textarea"
+            onChange={this.updateMessage}
             onKeyPress={this.checkSubmit}
             value={this.state.message}
-            placeholder="Write a Message">
+            placeholder="Write a Comment">
           </textarea>
 
-          <button>Send</button>
+          <a id="chatBtn" className="btn-floating btn-large waves-effect waves-light"><i className="material-icons" onClick={this.sendMessage}>chat</i></a>
         </form>
       </div>
     );
