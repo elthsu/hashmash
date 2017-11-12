@@ -134,12 +134,14 @@ io.on("connection", function(socket) {
 	// client sent update properties for task
 	socket.on("update", function(data) {
 		// required
-		if (!socket.room || !data.id) return;
+		console.log(data)
+		//if (!socket.room || !data.id) return;
 
 		// re-map object to fit into mongo's janky syntax
 		var obj = {};
 
 		for (var key in data) {
+			console.log(key)
 			obj["tasks.$." + key] = data[key];
 		}
 
@@ -154,6 +156,7 @@ io.on("connection", function(socket) {
 			update: {$set: obj},
 			new: true
 		}, function(err, docs) {
+			console.log(docs)
 			// if task no longer exists, cancel out
 			if (!docs) return;
 

@@ -23,6 +23,7 @@ class Main extends React.Component {
 
     this._selectProject = this._selectProject.bind(this);
     this.updateCurrentTask = this.updateCurrentTask.bind(this);
+    this._updateTask = this._updateTask.bind(this);
   }
 
   componentDidMount() {
@@ -85,13 +86,14 @@ class Main extends React.Component {
     }
   }
 
-  _updateTask() {
+  _updateTask(value, taskEdit) {
+    console.log(value, taskEdit)
+    let id = this.props.params.id
     // won't work until user has entered a "room" (i.e. selected a project)
     // id of task is required
     socket.emit("update", {
-      id: 2,
-      title: "Task 2 updated",
-      description: "New description"
+      id: id,
+      [taskEdit]: value
     });
   }
 
@@ -120,8 +122,8 @@ class Main extends React.Component {
       <Nav _selectProject={this._selectProject}
       allProjects = {this.state.allProjects} collaborators = {this.state.collaborators}/>
 
-      {this.props.children && React.cloneElement(this.props.children, {
-      tasks: this.state.tasks, _selectTask: this._selectTask, currentTask: this.state.currentTask
+      {this.props.children && React.cloneElement(this.props.children, {_updateTask: this._updateTask,
+      project: this.state.project, tasks: this.state.tasks, _selectTask: this._selectTask, currentTask: this.state.currentTask
 })}
     </div>
     );
