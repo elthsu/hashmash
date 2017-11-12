@@ -1,8 +1,6 @@
 // Include React
 var React = require("react");
 
-var project;
-
 // socket connection
 import {socket} from "../config/socket.js";
 
@@ -49,16 +47,21 @@ class Nav extends React.Component {
   }
 
   handleSubmit() {
+    var developer = this.state.developerBtn;
+    console.log(developer);
+    if (developer === "Developer") {
+      developer = null;
+    }
     socket.emit("new", {
       title: this.state.newTitle,
       description: this.state.newDescription,
-      owner: this.state.developerBtn,
+      owner: developer,
       priority: this.state.newPriority,
       status: this.state.newStatus,
       type: this.state.newType,
       timeEstimate: this.state.newEstimate
     });
-    this.resetModal;
+    this.resetModal();
   }
 
   resetModal() {
@@ -67,7 +70,7 @@ class Nav extends React.Component {
   }
 
   chooseProject(event) {
-    project = event.target.getAttribute("value");
+    var project = event.target.getAttribute("value");
     this.props._selectProject(project);
   }
 
