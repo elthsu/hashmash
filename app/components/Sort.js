@@ -16,7 +16,7 @@ class Sort extends React.Component {
     super();
 
     this.state = {
-      activeColumn: "",
+      activeColumn: "id",
       sortReverse: false,
       filter: ""
     };
@@ -62,15 +62,15 @@ class Sort extends React.Component {
           a = parseInt(a[field]);
           b = parseInt(b[field]);
 
-          return (reverse ? b > a : a > b);
+          return (reverse ? b - a : a - b);
 
           break;
         // by letter
         case "title":
         case "owner":
         case "status":
-          a = a[field].toLowerCase();
-          b = b[field].toLowerCase();
+          a = a[field] ? a[field].toLowerCase() : "";
+          b = b[field] ? b[field].toLowerCase() : "";
 
           if (reverse) {
             if (b < a) return -1;
