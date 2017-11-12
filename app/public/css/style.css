@@ -1,8 +1,4 @@
 
-  * {
-    color: saddlebrown;
-  }
-
   nav {
     background: Peru;
   }
@@ -11,10 +7,15 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    color: saddlebrown;
   }
 
   main {
     flex: 1 0 auto;
+  }
+
+  footer {
+    color: white;
   }
 
   #announcement {
@@ -123,16 +124,25 @@
   #taskWin {
     border: 1px solid Peru;
     border-radius: 3px;
-    min-height: 600px;
+    min-height: 900px;
   }
 
-  #chatWin {
+  #chatWin,
+  #chatInputWin {
     border: 1px solid Peru;
     border-radius: 3px;
     margin-left: 30px;
     text-align: right;
-    min-height: 600px;
+    height: 680px;
     padding-top: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  #chatInputWin{
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 50px;
   }
 
   #chatInput {
@@ -215,11 +225,14 @@
   #mainPageWrap {
     padding: 30px 0;
     min-height: 400px;
+    margin-bottom: 50px;
   }
 
   #welcomeText {
     padding: 70px;
-    min-height: 400px;
+    height: 400px;
+    margin-bottom: 50px;
+
   }
 
   th:hover {
@@ -355,4 +368,16 @@
   #projectDrop {
 
     width: 290px !important;
+    max-height: 450px !important;
+    overflow-y: scroll;
+  }
+
+  #new-developer {
+
+    max-height: 350px !important;
+    overflow-y: scroll;
+  }
+
+  .white-text {
+    color: white !important;
   }
