@@ -1,8 +1,4 @@
 
-  * {
-    color: saddlebrown;
-  }
-
   nav {
     background: Peru;
   }
@@ -11,10 +7,15 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    color: saddlebrown;
   }
 
   main {
     flex: 1 0 auto;
+  }
+
+  footer {
+    color: white;
   }
 
   #announcement {
@@ -375,4 +376,8 @@
 
     max-height: 350px !important;
     overflow-y: scroll;
+  }
+
+  .white-text {
+    color: white !important;
   }
