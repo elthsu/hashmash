@@ -99,18 +99,6 @@ class Main extends React.Component {
     socket.emit("delete", {id: 1});
   }
 
-  _sendChat() {
-    // normally, this would be tied to state, but since we're testing and all...
-    var txt = document.getElementById("chat").value;
-
-    // chat message should include id of task
-    socket.emit("chat", {
-      id: 1,
-      user: "elton bo belton",
-      message: txt
-    });
-  }
-
   render() {
     return (
       <div>
