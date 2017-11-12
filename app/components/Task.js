@@ -19,26 +19,23 @@ class Task extends React.Component {
       currentTask: {},
       chat: []
     };
+
+    this.update = this.update.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.setState({chat: ["hurry up!", "are you almost done?"]});
-  //   // when user connects to server, try to join room based on project name
-  //   socket.on("connect", function(data) {
-  //     socket.emit("join", "test");
-  //   });
-  //
-  //   // client receives an update from server
-  //   socket.on("update", (data) => {
-  //     // check type. update could be whole project or task level
-  //     switch (data.type) {
-  //       case "project":
-  //         this.setState({project: data.data, tasks: data.data.tasks});
-  //
-  //         break;
-  //     }
-  //   });
-  // }
+
+
+componentDidMount() {
+  $('.dropdown-button').dropdown();
+}
+
+update(e) {
+
+let newVal = e.target.getAttribute("value");
+let taskKey = e.target.parentElement.parentElement.getAttribute("data-task");
+
+this.props._updateTask(newVal, taskKey);
+}
 
 
   render() {
@@ -63,7 +60,7 @@ class Task extends React.Component {
         <div className="container">
           <div className="row">
           <div className="col s12 pathing">
-            <h5>PROJECT NAME > {this.props.currentTask.title}</h5>
+            <h5> {this.props.project}>{this.props.currentTask.title}</h5>
           </div>
           </div>
           <div className="row">
@@ -74,29 +71,29 @@ class Task extends React.Component {
               <h6 className="taskText">Description:<br />{this.props.currentTask.description}</h6>
               <div className="row center">
                 <div className="col s4 taskDrop">
-                  <a className='dropdown-button btn z-depth-1' href='#' data-activates='priorityDrop'>{this.props.currentTask.priority}</a>
-                  <ul id='priorityDrop' className='dropdown-content'>
-                    <li><a href="#!">Critical</a></li>
-                    <li><a href="#!">Normal</a></li>
-                    <li><a href="#!">Backburner</a></li>
+                  <a className='dropdown-button btn' data-beloworigin="true"  data-activates='updatepriority'>{this.props.currentTask.priority}</a>
+                  <ul name='updatepriority' data-task="priority" id='updatepriority' className='dropdown-content collapsible' data-collapsible="accordion">
+                    <li><a value="critical" onClick={this.update}>Critical</a></li>
+                    <li><a value="normal" onClick={this.update}>Normal</a></li>
+                    <li><a value="backburner" onClick={this.update}>Backburner</a></li>
                   </ul>
                 </div>
                 <div className="col s4 taskDrop">
                   <a className='dropdown-button btn z-depth-1' href='#' data-activates='statusDrop'>{this.props.currentTask.status}</a>
-                  <ul id='statusDrop' className='dropdown-content collapsible'>
-                    <li><a href="#!">To Do</a></li>
-                    <li><a href="#!">In Progress</a></li>
-                    <li><a href="#!">Blocked</a></li>
-                    <li><a href="#!">In Review</a></li>
-                    <li><a href="#!">Done</a></li>
+                  <ul id='statusDrop' data-task="status" className='dropdown-content '>
+                    <li><a value="to do" onClick={this.update}>To Do</a></li>
+                    <li><a value="in progress" onClick={this.update}>In Progress</a></li>
+                    <li><a value="blocked" onClick={this.update}>Blocked</a></li>
+                    <li><a value="in review" onClick={this.update}>In Review</a></li>
+                    <li><a value="done" onClick={this.update}>Done</a></li>
                   </ul>
                 </div>
                 <div className="col s4 taskDrop">
                   <a className='dropdown-button btn z-depth-1' href='#' data-activates='typeDrop'>{this.props.currentTask.type}</a>
-                  <ul id='typeDrop' className='dropdown-content'>
-                    <li><a href="#!">Feature</a></li>
-                    <li><a href="#!">Bug</a></li>
-                    <li><a href="#!">Research</a></li>
+                  <ul id='typeDrop' data-task="type" className='dropdown-content'>
+                    <li><a value="feature" onClick={this.update}>Feature</a></li>
+                    <li><a value="bug" onClick={this.update}>Bug</a></li>
+                    <li><a value="research" onClick={this.update}>Research</a></li>
                   </ul>
                 </div>
               </div>

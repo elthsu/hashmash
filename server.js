@@ -139,7 +139,8 @@ io.on("connection", function(socket) {
 		var obj = {};
 
 		for (var key in data) {
-			obj["tasks.$." + key] = data[key];
+			if (key !== "id")
+				obj["tasks.$." + key] = data[key];
 		}
 
 		// update timestamp
@@ -148,7 +149,7 @@ io.on("connection", function(socket) {
 		db.projects.findAndModify({
 			query: {
 				name: socket.room,
-				tasks: {$elemMatch: {id: data.id}}
+				tasks: {$elemMatch: {id: parseInt(data.id)}}
 			},
 			update: {$set: obj},
 			new: true
