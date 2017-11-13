@@ -1,2 +1,2 @@
-# hashmash
-A Project Manager for Aspiring Coders 
+# #mash
+Streamlined project management based on your GitHub repos
