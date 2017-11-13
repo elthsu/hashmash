@@ -87,7 +87,10 @@ class Main extends React.Component {
     if (event) {
       // sets user up to start getting updates on this project
       socket.emit("join", event);
-      this.setState({project: event});
+      this.setState({
+        project: event,
+        tasks: []
+      });
     }
   }
 
