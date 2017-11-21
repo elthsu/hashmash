@@ -5,6 +5,8 @@ var moment = require("moment");
 // socket connection
 import {socket} from "../config/socket.js";
 
+import {Link} from 'react-router';
+
 import {Modal, Button, Icon} from 'react-materialize';
 
 var Chat = require("./Chat");
@@ -65,6 +67,9 @@ class Task extends React.Component {
   }
 
   render() {
+
+    // url of project
+    var url = `/${this.props.project.replace("/", ">")}`;
     // editable text fields
     var title, description, timeSpent, timeEstimate;
 
@@ -108,7 +113,7 @@ class Task extends React.Component {
         <div className="container">
           <div className="row">
           <div className="col s12 pathing">
-            <h5> {this.props.project} &gt; {this.props.currentTask.title}</h5>
+            <h5> <Link id="projPath" to={url}>{this.props.project}</Link> &gt; {this.props.currentTask.title}</h5>
           </div>
           </div>
           <div className="row">
