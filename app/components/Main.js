@@ -107,12 +107,12 @@ class Main extends React.Component {
       allProjects = {this.state.allProjects} collaborators = {this.state.collaborators} project={this.state.project}/>
 
       {this.props.children && React.cloneElement(this.props.children, {
-        project: this.state.project, 
-        tasks: this.state.tasks, 
+        project: this.state.project,
+        tasks: this.state.tasks,
         collaborators: this.state.collaborators,
         currentTask: this.state.currentTask
       })}
-  
+
       <footer className="page-footer">
             <div className="container">
               <div className="row">

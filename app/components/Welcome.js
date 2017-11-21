@@ -8,7 +8,7 @@ class Welcome extends React.Component {
   render() {
     return (
       <div>
-        <div className="container">
+        <div id="welcomePlaceholder" className="container">
           <div className="row">
             <div id="welcomeText" className="col s10 offset-s1 z-depth-5">
               <h5>To get started, select a Project from the dropdown menu above.</h5>

@@ -114,9 +114,7 @@ class Nav extends React.Component {
                 </ul>
               </li>
               <li>
-                <Modal header='New Task' trigger={< a style = {newTask} waves = 'light' > New Task < /a>} actions={< Button className = "btn waves-effect waves-light btn-flat modal-action modal-close z-depth-2" waves = 'light' id = "add-task" onClick = {
-                  this.handleSubmit
-                } > add task < /Button>}>
+                <Modal header='New Task' trigger={<a style={newTask} waves='light'>New Task</a>} actions={<Button className="btn waves-effect waves-light btn-flat modal-action modal-close z-depth-2" waves='light' id="add-task" onClick={this.handleSubmit}>add task</Button>}>
 
                   <div className="row">
                     <form id="modalForm" onChange={this.createTask} className="col s12">
